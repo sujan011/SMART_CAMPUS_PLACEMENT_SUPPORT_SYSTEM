@@ -1,0 +1,248 @@
+import React, { useState, useEffect, createContext, useContext } from 'react';
+import { api } from '../services/api';
+const AppContext = createContext(null);
+
+export const AppProvider = ({ children }) => {
+    const [currentUser, setCurrentUser] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    
+    // We keep data in state so we can mutate it upon login
+    const [data, setData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const [chatMessages, setChatMessages] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [jobFilter, setJobFilter] = useState('all');
+
+    useEffect(() => {
+
+        const initializeApp = async () => {
+
+            try {
+
+                const access = localStorage.getItem("access");
+
+                // If no token exists, stop here
+                if (!access) {
+                    setIsLoading(false);
+                    return;
+                }
+
+                // Load current user
+                const userResponse = await api.getCurrentUser();
+                console.log("Current User:", userResponse.data);
+
+                setCurrentUser(userResponse.data);
+                setIsAuthenticated(true);
+
+                // Now load dashboard
+                const dashboardResponse = await api.getDashboardData();
+
+                const dashboard = dashboardResponse.data;
+
+                setData({
+                    user: {
+                        name: userResponse.data.username,
+                        department: userResponse.data.department || "Student",
+                        avatar:
+                            userResponse.data.avatar ||
+                            `https://ui-avatars.com/api/?name=${encodeURIComponent(userResponse.data.username)}`,
+                    },
+
+                    metrics: {
+                        profileCompletion: dashboard.profile_completion,
+                        placementReadiness: dashboard.resume_score,
+                        applications: dashboard.applications,
+                        inProgress: 0,
+                        upcomingInterviews: dashboard.upcoming_interviews.length,
+                        nextInterview:
+                            dashboard.upcoming_interviews.length > 0
+                                ? dashboard.upcoming_interviews[0].scheduled_at
+                                : "No Interview",
+                        progressScore: dashboard.profile_completion,
+                    },
+
+                    recommendedJobs: dashboard.recommended_jobs,
+                    applications: dashboard.recent_applications,
+                    upcomingInterviews: dashboard.upcoming_interviews,
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                localStorage.removeItem("access");
+                localStorage.removeItem("refresh");
+
+                setCurrentUser(null);
+                setIsAuthenticated(false);
+
+            } finally {
+
+                setIsLoading(false);
+
+            }
+
+        };
+
+        initializeApp();
+
+    }, []);
+
+    const login = async (email, password) => {
+
+        try {
+
+            const response = await api.login({
+                email,
+                password,
+            });
+
+            localStorage.setItem("access", response.data.access);
+            localStorage.setItem("refresh", response.data.refresh);
+
+            const userResponse = await api.getCurrentUser();
+
+            setCurrentUser(userResponse.data);
+            setIsAuthenticated(true);
+
+            const dashboardResponse = await api.getDashboardData();
+
+            const dashboard = dashboardResponse.data;
+
+            setData({
+                user: {
+                    name: userResponse.data.username,
+                    department: userResponse.data.department || "Student",
+                    avatar:
+                        userResponse.data.avatar ||
+                        "https://ui-avatars.com/api/?name=" +
+                            encodeURIComponent(userResponse.data.username),
+                },
+
+                metrics: {
+                    profileCompletion: dashboard.profile_completion,
+                    placementReadiness: dashboard.resume_score,
+                    applications: dashboard.applications,
+                    inProgress: 0,
+                    upcomingInterviews: dashboard.upcoming_interviews,
+                    nextInterview: "No Interview",
+                    progressScore: dashboard.profile_completion,
+                },
+
+                recommendedJobs: [],
+                applications: dashboard.recent_applications,
+                upcomingInterviews: [],
+            });
+
+            return {
+                success: true,
+            };
+
+        } catch (error) {
+
+            console.error(error);
+
+            return {
+                success: false,
+                message:
+                    error.response?.data?.detail ||
+                    "Login failed",
+            };
+        }
+    };
+
+    const register = async (userData) => {
+
+        try {
+
+            const response = await api.register({
+
+                username: userData.username,
+
+                email: userData.email,
+
+                password: userData.password,
+
+                password2: userData.password,
+
+                phone: userData.phone,
+
+            });
+
+            // Save JWT Tokens
+
+            localStorage.setItem(
+                "access",
+                response.data.access
+            );
+
+            localStorage.setItem(
+                "refresh",
+                response.data.refresh
+            );
+
+            // Save Logged-in User
+
+            setCurrentUser(response.data.user);
+
+            setIsAuthenticated(true);
+
+            return response.data.user;
+
+        }
+
+        catch (error) {
+
+            console.log("========== ERROR ==========");
+            console.log(error);
+
+            if (error.response) {
+                console.log("Status:", error.response.status);
+                console.log("Data:", error.response.data);
+            }
+
+            throw error;
+        }
+
+    };
+
+    const logout = () => {
+
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+        setCurrentUser(null);
+        setIsAuthenticated(false);
+    };
+
+
+    const getProfile = async () => {
+        try {
+            const response = await api.getProfile();
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+
+    const updateData = (newData) => setData(prev => ({ ...prev, ...newData }));
+    const addChatMessage = (msg) => setChatMessages(prev => [...prev, msg]);
+
+    return (
+        <AppContext.Provider value={{
+            currentUser, isAuthenticated, login, register, logout,
+            data, setData: updateData,
+            isLoading, error,
+            chatMessages, setChatMessages, addChatMessage,
+            searchQuery, setSearchQuery,
+            jobFilter, setJobFilter,
+            getProfile,
+        }}>
+            {children}
+        </AppContext.Provider>
+    );
+};
+
+export const useApp = () => useContext(AppContext);

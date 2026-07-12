@@ -1,0 +1,472 @@
+{
+  "students": [
+    {
+      "id": "21CS001",
+      "name": "Rahul Sharma",
+      "email": "rahul.sharma@college.edu",
+      "department": "Computer Science",
+      "batch": "2021 - 2025",
+      "cgpa": 8.72,
+      "status": "Eligible",
+      "placementStatus": "Placed"
+    },
+    {
+      "id": "21IT015",
+      "name": "Priya Singh",
+      "email": "priya.singh@college.edu",
+      "department": "Information Technology",
+      "batch": "2021 - 2025",
+      "cgpa": 8.45,
+      "status": "Eligible",
+      "placementStatus": "In Process"
+    },
+    {
+      "id": "21CS042",
+      "name": "Amit Kumar",
+      "email": "amit.kumar@college.edu",
+      "department": "Computer Science",
+      "batch": "2021 - 2025",
+      "cgpa": 7.89,
+      "status": "Eligible",
+      "placementStatus": "Shortlisted"
+    },
+    {
+      "id": "21EC031",
+      "name": "Sneha Patel",
+      "email": "sneha.patel@college.edu",
+      "department": "Electronics & Comm.",
+      "batch": "2021 - 2025",
+      "cgpa": 8.15,
+      "status": "Eligible",
+      "placementStatus": "In Process"
+    },
+    {
+      "id": "21ME023",
+      "name": "Vikram Raj",
+      "email": "vikram.raj@college.edu",
+      "department": "Mechanical Engg.",
+      "batch": "2021 - 2025",
+      "cgpa": 7.62,
+      "status": "Eligible",
+      "placementStatus": "Not Applied"
+    },
+    {
+      "id": "21CS058",
+      "name": "Anjali Mehta",
+      "email": "anjali.mehta@college.edu",
+      "department": "Computer Science",
+      "batch": "2021 - 2025",
+      "cgpa": 9.12,
+      "status": "Eligible",
+      "placementStatus": "Placed"
+    },
+    {
+      "id": "21IT009",
+      "name": "Rohan Das",
+      "email": "rohan.das@college.edu",
+      "department": "Information Technology",
+      "batch": "2021 - 2025",
+      "cgpa": 8.03,
+      "status": "Eligible",
+      "placementStatus": "Shortlisted"
+    },
+    {
+      "id": "21EC011",
+      "name": "Neha Verma",
+      "email": "neha.verma@college.edu",
+      "department": "Electronics & Comm.",
+      "batch": "2021 - 2025",
+      "cgpa": 8.9,
+      "status": "Eligible",
+      "placementStatus": "Placed"
+    },
+    {
+      "id": "21ME017",
+      "name": "Kunal Kapoor",
+      "email": "kunal.kapoor@college.edu",
+      "department": "Mechanical Engg.",
+      "batch": "2021 - 2025",
+      "cgpa": 7.35,
+      "status": "Not Eligible",
+      "placementStatus": "-"
+    },
+    {
+      "id": "21CS063",
+      "name": "Pooja Nair",
+      "email": "pooja.nair@college.edu",
+      "department": "Computer Science",
+      "batch": "2021 - 2025",
+      "cgpa": 8.67,
+      "status": "Eligible",
+      "placementStatus": "In Process"
+    }
+  ],
+  "companies": [
+    {
+      "id": "1",
+      "name": "Tech Mahindra",
+      "location": "Pune, MH",
+      "jobs": [
+        {
+          "id": "101",
+          "role": "Software Developer",
+          "package": "8 LPA",
+          "working": "Hybrid",
+          "schedule": "Full-time"
+        },
+        {
+          "id": "102",
+          "role": "System Engineer",
+          "package": "6.5 LPA",
+          "working": "On-site",
+          "schedule": "Shift hours"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Amazon",
+      "location": "Hyderabad, TG",
+      "jobs": [
+        {
+          "id": "201",
+          "role": "Product Intern",
+          "package": "45k / month",
+          "working": "Remote",
+          "schedule": "Part-time"
+        }
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "id": "1",
+      "name": "Rahul Sharma",
+      "rollNo": "21CS001",
+      "stream": "CSE",
+      "batch": "2021-25",
+      "company": "Amazon",
+      "ctc": "24 LPA"
+    },
+    {
+      "id": "2",
+      "name": "Priya Singh",
+      "rollNo": "21IT015",
+      "stream": "IT",
+      "batch": "2021-25",
+      "company": "TCS",
+      "ctc": "8 LPA"
+    },
+    {
+      "id": "3",
+      "name": "Amit Kumar",
+      "rollNo": "22ME042",
+      "stream": "Mechanical",
+      "batch": "2022-26",
+      "company": "L&T",
+      "ctc": "6.5 LPA"
+    },
+    {
+      "id": "4",
+      "name": "Sneha Patel",
+      "rollNo": "21EC031",
+      "stream": "ECE",
+      "batch": "2021-25",
+      "company": "Tech Mahindra",
+      "ctc": "7.5 LPA"
+    },
+    {
+      "id": "5",
+      "name": "Rohan Das",
+      "rollNo": "21CS058",
+      "stream": "CSE",
+      "batch": "2021-25",
+      "company": "Infosys",
+      "ctc": "9 LPA"
+    }
+  ],
+  "interviews": [
+    {
+      "id": "1",
+      "name": "Rahul Sharma",
+      "roll": "21CS001",
+      "dept": "Computer Science",
+      "cgpa": "8.72",
+      "status": "Selected",
+      "date": "10 May 2025"
+    },
+    {
+      "id": "2",
+      "name": "Priya Singh",
+      "roll": "21IT015",
+      "dept": "Information Technology",
+      "cgpa": "8.45",
+      "status": "Selected",
+      "date": "10 May 2025"
+    },
+    {
+      "id": "3",
+      "name": "Amit Kumar",
+      "roll": "21CS042",
+      "dept": "Computer Science",
+      "cgpa": "7.89",
+      "status": "Shortlisted",
+      "date": "11 May 2025"
+    },
+    {
+      "id": "4",
+      "name": "Sneha Patel",
+      "roll": "21EC031",
+      "dept": "Electronics & Comm.",
+      "cgpa": "8.15",
+      "status": "Shortlisted",
+      "date": "11 May 2025"
+    },
+    {
+      "id": "5",
+      "name": "Vikram Raj",
+      "roll": "21ME023",
+      "dept": "Mechanical Engg.",
+      "cgpa": "7.62",
+      "status": "Applied",
+      "date": "12 May 2025"
+    }
+  ],
+  "reports": [
+    {
+      "id": "1",
+      "name": "B.Tech 2024 Placement Summary",
+      "type": "Placement",
+      "date": "31 May 2025, 10:30 AM",
+      "by": "Amit Verma",
+      "format": "PDF",
+      "records": 1245
+    },
+    {
+      "id": "2",
+      "name": "TCS Ninja Hiring 2025 Data",
+      "type": "Drive",
+      "date": "30 May 2025, 04:15 PM",
+      "by": "Amit Verma",
+      "format": "Excel",
+      "records": 450
+    },
+    {
+      "id": "3",
+      "name": "Unplaced Students (CSE & IT)",
+      "type": "Student",
+      "date": "29 May 2025, 11:45 AM",
+      "by": "System",
+      "format": "PDF",
+      "records": 86
+    },
+    {
+      "id": "4",
+      "name": "Top Recruiters 2024-25",
+      "type": "Company",
+      "date": "28 May 2025, 09:20 AM",
+      "by": "Amit Verma",
+      "format": "Excel",
+      "records": 25
+    },
+    {
+      "id": "5",
+      "name": "Pre-Placement Offers (PPO)",
+      "type": "Offer",
+      "date": "27 May 2025, 02:10 PM",
+      "by": "Amit Verma",
+      "format": "PDF",
+      "records": 112
+    },
+    {
+      "id": "6",
+      "name": "B.Tech 2025 Registration List",
+      "type": "Student",
+      "date": "26 May 2025, 10:00 AM",
+      "by": "System",
+      "format": "Excel",
+      "records": 1520
+    }
+  ],
+  "scheduledReports": [
+    {
+      "id": "1",
+      "name": "Daily Placement Summary",
+      "freq": "Daily",
+      "time": "06:00 PM",
+      "status": "Active"
+    },
+    {
+      "id": "2",
+      "name": "Weekly Drive Updates",
+      "freq": "Weekly (Fri)",
+      "time": "05:00 PM",
+      "status": "Active"
+    },
+    {
+      "id": "3",
+      "name": "Monthly Unplaced Students",
+      "freq": "Monthly (1st)",
+      "time": "09:00 AM",
+      "status": "Paused"
+    },
+    {
+      "id": "4",
+      "name": "Quarterly Corporate Relations",
+      "freq": "Quarterly",
+      "time": "10:00 AM",
+      "status": "Active"
+    }
+  ],
+  "studentsChartData": [
+    {
+      "name": "Jan",
+      "applied": 400,
+      "eligible": 240
+    },
+    {
+      "name": "Feb",
+      "applied": 300,
+      "eligible": 139
+    },
+    {
+      "name": "Mar",
+      "applied": 200,
+      "eligible": 980
+    },
+    {
+      "name": "Apr",
+      "applied": 278,
+      "eligible": 390
+    },
+    {
+      "name": "May",
+      "applied": 189,
+      "eligible": 480
+    },
+    {
+      "name": "Jun",
+      "applied": 239,
+      "eligible": 380
+    },
+    {
+      "name": "Jul",
+      "applied": 349,
+      "eligible": 430
+    }
+  ],
+  "placementsPieData": [
+    {
+      "name": "Placed",
+      "value": 326
+    },
+    {
+      "name": "Unplaced",
+      "value": 776
+    }
+  ],
+  "placementsBarData": [
+    {
+      "name": "TCS",
+      "applied": 400,
+      "placed": 120
+    },
+    {
+      "name": "Infosys",
+      "applied": 300,
+      "placed": 85
+    },
+    {
+      "name": "Wipro",
+      "applied": 250,
+      "placed": 60
+    },
+    {
+      "name": "Amazon",
+      "applied": 150,
+      "placed": 12
+    },
+    {
+      "name": "Tech Mahindra",
+      "applied": 200,
+      "placed": 49
+    }
+  ],
+  "reportsTrendData": [
+    {
+      "name": "Jun",
+      "reports": 12
+    },
+    {
+      "name": "Jul",
+      "reports": 19
+    },
+    {
+      "name": "Aug",
+      "reports": 15
+    },
+    {
+      "name": "Sep",
+      "reports": 22
+    },
+    {
+      "name": "Oct",
+      "reports": 30
+    },
+    {
+      "name": "Nov",
+      "reports": 28
+    },
+    {
+      "name": "Dec",
+      "reports": 35
+    },
+    {
+      "name": "Jan",
+      "reports": 42
+    },
+    {
+      "name": "Feb",
+      "reports": 38
+    },
+    {
+      "name": "Mar",
+      "reports": 45
+    },
+    {
+      "name": "Apr",
+      "reports": 50
+    },
+    {
+      "name": "May",
+      "reports": 48
+    }
+  ],
+  "reportsPieData": [
+    {
+      "name": "Placement",
+      "value": 45,
+      "color": "#3b82f6"
+    },
+    {
+      "name": "Student",
+      "value": 25,
+      "color": "#10b981"
+    },
+    {
+      "name": "Company",
+      "value": 15,
+      "color": "#f59e0b"
+    },
+    {
+      "name": "Drive",
+      "value": 10,
+      "color": "#8b5cf6"
+    },
+    {
+      "name": "Offer",
+      "value": 5,
+      "color": "#64748b"
+    }
+  ]
+}

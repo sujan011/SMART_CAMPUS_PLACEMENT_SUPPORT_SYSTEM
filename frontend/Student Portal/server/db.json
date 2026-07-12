@@ -1,0 +1,1364 @@
+{
+  "dashboardData": {
+    "user": {
+      "name": "Rahul Sharma",
+      "department": "Computer Science",
+      "avatar": "https://ui-avatars.com/api/?name=Rahul+Sharma&background=3B82F6&color=fff&size=40"
+    },
+    "metrics": {
+      "profileCompletion": 75,
+      "placementReadiness": "Good",
+      "applications": 18,
+      "inProgress": 6,
+      "upcomingInterviews": 2,
+      "nextInterview": "25 May 2025",
+      "progressScore": 65
+    },
+    "recommendedJobs": [
+      {
+        "id": 1,
+        "company": "Google",
+        "logo": "G",
+        "title": "Software Engineer",
+        "location": "Bangalore",
+        "type": "Full-time",
+        "salary": "25-35 LPA",
+        "match": 95
+      },
+      {
+        "id": 2,
+        "company": "Microsoft",
+        "logo": "M",
+        "title": "Frontend Developer",
+        "location": "Hyderabad",
+        "type": "Full-time",
+        "salary": "20-30 LPA",
+        "match": 88
+      },
+      {
+        "id": 3,
+        "company": "Amazon",
+        "logo": "A",
+        "title": "Backend Engineer",
+        "location": "Chennai",
+        "type": "Internship",
+        "salary": "15-20 LPA",
+        "match": 72
+      },
+      {
+        "id": 4,
+        "company": "Flipkart",
+        "logo": "F",
+        "title": "Full Stack Developer",
+        "location": "Bangalore",
+        "type": "Full-time",
+        "salary": "22-32 LPA",
+        "match": 91
+      }
+    ],
+    "applications": [
+      {
+        "company": "Google",
+        "position": "Software Engineer",
+        "status": "Under Review",
+        "date": "2025-05-20"
+      },
+      {
+        "company": "Microsoft",
+        "position": "Frontend Developer",
+        "status": "Applied",
+        "date": "2025-05-18"
+      },
+      {
+        "company": "Amazon",
+        "position": "Backend Engineer",
+        "status": "Offered",
+        "date": "2025-05-15"
+      },
+      {
+        "company": "Flipkart",
+        "position": "Full Stack Developer",
+        "status": "Under Review",
+        "date": "2025-05-12"
+      },
+      {
+        "company": "TCS",
+        "position": "Systems Engineer",
+        "status": "Applied",
+        "date": "2025-05-10"
+      }
+    ],
+    "upcomingInterviews": [
+      {
+        "company": "Infosys",
+        "role": "Systems Engineer",
+        "time": "10:00 AM",
+        "location": "Virtual",
+        "date": "2025-05-25"
+      },
+      {
+        "company": "TCS",
+        "role": "Digital Engineer",
+        "time": "2:30 PM",
+        "location": "TCS Campus",
+        "date": "2025-05-28"
+      }
+    ],
+    "atsScore": {
+      "overall": 85,
+      "content": 88,
+      "format": 82,
+      "keywords": 90,
+      "structure": 80,
+      "suggestions": [
+        "Add more quantifiable achievements",
+        "Include industry-specific keywords",
+        "Improve summary section"
+      ]
+    },
+    "atsAnalysis": [
+      {
+        "param": "Contact Information",
+        "status": "Excellent"
+      },
+      {
+        "param": "Work Experience",
+        "status": "Good"
+      },
+      {
+        "param": "Education",
+        "status": "Excellent"
+      },
+      {
+        "param": "Skills",
+        "status": "Good"
+      }
+    ],
+    "matchedKeywords": [
+      "Python",
+      "React",
+      "SQL",
+      "Data Structures",
+      "JavaScript",
+      "Node.js"
+    ],
+    "missingKeywords": [
+      "AWS",
+      "Docker",
+      "CI/CD",
+      "Kubernetes",
+      "TypeScript"
+    ],
+    "preparationMetrics": [
+      {
+        "label": "Aptitude",
+        "value": 65,
+        "color": "#3B82F6"
+      },
+      {
+        "label": "Technical",
+        "value": 72,
+        "color": "#8B5CF6"
+      },
+      {
+        "label": "Coding Practice",
+        "value": 58,
+        "color": "#F59E0B"
+      },
+      {
+        "label": "HR Questions",
+        "value": 80,
+        "color": "#10B981"
+      },
+      {
+        "label": "Mock Interviews",
+        "value": 40,
+        "color": "#EF4444"
+      }
+    ],
+    "recommendedTopics": [
+      {
+        "name": "Arrays - Two Pointers",
+        "category": "DSA",
+        "progress": 70
+      },
+      {
+        "name": "Dynamic Programming Basics",
+        "category": "DSA",
+        "progress": 45
+      },
+      {
+        "name": "OOPs Concepts",
+        "category": "Technical",
+        "progress": 85
+      },
+      {
+        "name": "SQL Joins",
+        "category": "Database",
+        "progress": 60
+      },
+      {
+        "name": "System Design",
+        "category": "Technical",
+        "progress": 30
+      }
+    ],
+    "chatHistory": [
+      {
+        "type": "bot",
+        "message": "Hello Rahul! How can I help you today?"
+      }
+    ],
+    "notifications": [
+      {
+        "id": 1,
+        "title": "Interview Scheduled",
+        "message": "Your interview with Google is scheduled.",
+        "read": false,
+        "time": "2 hours ago"
+      },
+      {
+        "id": 2,
+        "title": "Application Viewed",
+        "message": "Microsoft viewed your application.",
+        "read": false,
+        "time": "5 hours ago"
+      },
+      {
+        "id": 3,
+        "title": "New Job Match",
+        "message": "You have a new job match for Frontend Developer.",
+        "read": false,
+        "time": "1 day ago"
+      },
+      {
+        "id": 4,
+        "title": "Profile Update",
+        "message": "Please complete your profile to 100%.",
+        "read": true,
+        "time": "2 days ago"
+      }
+    ]
+  },
+  "placement": {
+    "aptitude": [
+      {
+        "id": "apt1",
+        "question": "A train running at the speed of 60 km/hr crosses a pole in 9 seconds. What is the length of the train?",
+        "options": [
+          "120 metres",
+          "180 metres",
+          "324 metres",
+          "150 metres"
+        ],
+        "answer": "150 metres",
+        "explanation": "Speed = (60 * 5/18) m/sec = 50/3 m/sec. Distance = Speed * Time = (50/3 * 9) = 150 m."
+      },
+      {
+        "id": "apt2",
+        "question": "The cost price of 20 articles is the same as the selling price of x articles. If the profit is 25%, then the value of x is:",
+        "options": [
+          "15",
+          "16",
+          "18",
+          "25"
+        ],
+        "answer": "16",
+        "explanation": "Let CP of each article be Re. 1 CP of x articles = Rs. x. SP of x articles = Rs. 20. Profit = 20 - x. (20-x)/x * 100 = 25 => x=16"
+      }
+    ],
+    "technical": [
+      {
+        "id": "tech1",
+        "question": "Which of the following is not an OOPS concept?",
+        "options": [
+          "Encapsulation",
+          "Polymorphism",
+          "Exception",
+          "Abstraction"
+        ],
+        "answer": "Exception",
+        "explanation": "Exception is a mechanism to handle runtime errors, not an OOP concept."
+      },
+      {
+        "id": "tech2",
+        "question": "What is a virtual memory?",
+        "options": [
+          "Memory management technique",
+          "Physical memory",
+          "Cache memory",
+          "None of the above"
+        ],
+        "answer": "Memory management technique",
+        "explanation": "Virtual memory is a memory management capability of an OS that uses hardware and software to allow a computer to compensate for physical memory shortages."
+      }
+    ],
+    "coding": [
+      {
+        "id": "code1",
+        "question": "Write a function to reverse a string in place.",
+        "type": "coding",
+        "language": "python",
+        "starterCode": "def reverse_string(s):\n  # write your code here\n  pass",
+        "answer": "def reverse_string(s):\n  return s[::-1]",
+        "explanation": "Using Python slicing `[::-1]` allows reversing the string easily."
+      },
+      {
+        "id": "code2",
+        "question": "Find the missing number in a given integer array of 1 to n.",
+        "type": "coding",
+        "language": "javascript",
+        "starterCode": "function findMissingNumber(arr) {\n  // your code here\n}",
+        "answer": "function findMissingNumber(arr) {\n  const n = arr.length + 1;\n  const expectedSum = (n * (n + 1)) / 2;\n  const actualSum = arr.reduce((acc, curr) => acc + curr, 0);\n  return expectedSum - actualSum;\n}",
+        "explanation": "Calculate the expected sum of numbers from 1 to n using the formula n(n+1)/2. Then subtract the actual sum of the array."
+      }
+    ],
+    "hr": [
+      {
+        "id": "hr1",
+        "question": "Tell me about yourself.",
+        "type": "open_ended",
+        "answer": "This is a subjective question. Focus on your professional background, key achievements, and why you are a good fit for the role.",
+        "tips": [
+          "Keep it professional",
+          "Highlight relevant skills",
+          "Be concise (2-3 minutes max)"
+        ]
+      },
+      {
+        "id": "hr2",
+        "question": "What are your greatest strengths and weaknesses?",
+        "type": "open_ended",
+        "answer": "Subjective. Mention a strength relevant to the job. For weakness, mention something you are actively working to improve.",
+        "tips": [
+          "Avoid clichés like 'perfectionist'",
+          "Provide examples for strengths",
+          "Show self-awareness for weaknesses"
+        ]
+      }
+    ],
+    "company": [
+      {
+        "companyName": "Google",
+        "questions": [
+          {
+            "id": "comp-google-1",
+            "question": "How does Google Search work?",
+            "answer": "Google Search works in three basic stages: Crawling (finding pages), Indexing (analyzing and storing), and Serving (ranking and showing results)."
+          },
+          {
+            "id": "comp-google-2",
+            "question": "What is your favorite Google product and how would you improve it?",
+            "type": "product_design",
+            "answer": "Subjective. Requires good product sense, identifying pain points, and proposing realistic solutions."
+          }
+        ]
+      },
+      {
+        "companyName": "Microsoft",
+        "questions": [
+          {
+            "id": "comp-ms-1",
+            "question": "Explain how you would design a system like Microsoft Teams.",
+            "type": "system_design",
+            "answer": "Involves discussing microservices architecture, WebSockets for real-time chat, load balancers, database choices (NoSQL for chat history), and handling high concurrency."
+          }
+        ]
+      }
+    ]
+  },
+  "chatbotQA": [
+    {
+      "keywords": [
+        "resume",
+        "cv",
+        "how to make resume"
+      ],
+      "answer": "Your resume should ideally be 1 page long. Highlight your skills, projects, and relevant experience. Make sure to include links to your GitHub and LinkedIn profiles."
+    },
+    {
+      "keywords": [
+        "ats",
+        "ats score",
+        "resume score"
+      ],
+      "answer": "ATS (Applicant Tracking System) parses your resume for keywords. To get a high score, use standard headings, avoid complex formatting (like columns or tables), and include keywords relevant to the job description."
+    },
+    {
+      "keywords": [
+        "aptitude",
+        "quant",
+        "logical reasoning"
+      ],
+      "answer": "Aptitude rounds usually test quantitative, logical, and verbal skills. Practice topics like Time & Work, Speed Distance, Profit Loss, and Number Series. We have a dedicated Aptitude section in the Interview Preparation module."
+    },
+    {
+      "keywords": [
+        "technical round",
+        "dsa",
+        "data structures"
+      ],
+      "answer": "For technical rounds, strong fundamentals in Data Structures and Algorithms (DSA) are crucial. Focus on Arrays, Strings, Linked Lists, Trees, and DP. Also, brush up on OOPs, DBMS, and OS."
+    },
+    {
+      "keywords": [
+        "hr round",
+        "introduce yourself",
+        "tell me about yourself"
+      ],
+      "answer": "When asked to introduce yourself, give a brief overview of your education, technical skills, a major project, and your career goals. Keep it under 2 minutes and be confident."
+    },
+    {
+      "keywords": [
+        "weakness",
+        "strength"
+      ],
+      "answer": "For strengths, mention traits like adaptability or quick learning with examples. For weaknesses, state a genuine weakness but also mention the steps you are taking to overcome it (e.g., public speaking and joining a toastmasters club)."
+    },
+    {
+      "keywords": [
+        "salary",
+        "expected salary"
+      ],
+      "answer": "As a fresher, it's best to say you expect salary as per company norms. Focus more on the role and learning opportunities rather than negotiating salary right away."
+    },
+    {
+      "keywords": [
+        "mock interview",
+        "practice interview"
+      ],
+      "answer": "Mock interviews simulate the real environment. Use our Mock Tests section to practice. Record yourself, analyze your mistakes, and work on your communication skills."
+    },
+    {
+      "keywords": [
+        "projects",
+        "what kind of projects"
+      ],
+      "answer": "Build projects that solve real-world problems. Full-stack web applications, machine learning models, or utility tools are great. Make sure you can explain every line of your code."
+    },
+    {
+      "keywords": [
+        "github",
+        "linkedin"
+      ],
+      "answer": "A strong GitHub profile shows your coding activity. Pin your best repositories. A professional LinkedIn profile helps recruiters find you; make sure to list your skills and ask for recommendations."
+    },
+    {
+      "keywords": [
+        "off campus",
+        "on campus"
+      ],
+      "answer": "On-campus drives have less competition compared to off-campus. For off-campus, leverage referrals, apply via careers pages, and participate in hackathons or coding contests."
+    },
+    {
+      "keywords": [
+        "coding platform",
+        "leetcode",
+        "hackerrank"
+      ],
+      "answer": "Platforms like LeetCode, HackerRank, and Codeforces are excellent for DSA practice. Aim to solve at least 200-300 questions focusing on medium difficulty on LeetCode."
+    },
+    {
+      "keywords": [
+        "certifications",
+        "certificate"
+      ],
+      "answer": "Certifications from reputed organizations (like AWS, Google, or Microsoft) can add value to your resume, but practical knowledge and projects weigh much more in technical interviews."
+    },
+    {
+      "keywords": [
+        "gpa",
+        "cgpa",
+        "marks",
+        "percentage"
+      ],
+      "answer": "Most companies have a strict cutoff of 60% or 6.5 CGPA without active backlogs. Keep your CGPA above 7.0 or 7.5 to be eligible for the majority of top companies."
+    },
+    {
+      "keywords": [
+        "rejection",
+        "failed interview"
+      ],
+      "answer": "Rejections are a part of the process. Ask for feedback if possible, analyze the areas you struggled with, and prepare those topics before your next interview. Don't lose hope!"
+    },
+    {
+      "keywords": [
+        "java",
+        "learn java",
+        "java interview"
+      ],
+      "answer": "For Java interviews, ensure you know the core concepts, common design patterns, and can write syntactically correct code on a whiteboard. Practice Java specific interview questions in our technical section."
+    },
+    {
+      "keywords": [
+        "python",
+        "learn python",
+        "python interview"
+      ],
+      "answer": "For Python interviews, ensure you know the core concepts, common design patterns, and can write syntactically correct code on a whiteboard. Practice Python specific interview questions in our technical section."
+    },
+    {
+      "keywords": [
+        "javascript",
+        "learn javascript",
+        "javascript interview"
+      ],
+      "answer": "For Javascript interviews, ensure you know the core concepts, common design patterns, and can write syntactically correct code on a whiteboard. Practice Javascript specific interview questions in our technical section."
+    },
+    {
+      "keywords": [
+        "react",
+        "learn react",
+        "react interview"
+      ],
+      "answer": "For React interviews, ensure you know the core concepts, common design patterns, and can write syntactically correct code on a whiteboard. Practice React specific interview questions in our technical section."
+    },
+    {
+      "keywords": [
+        "node",
+        "learn node",
+        "node interview"
+      ],
+      "answer": "For Node interviews, ensure you know the core concepts, common design patterns, and can write syntactically correct code on a whiteboard. Practice Node specific interview questions in our technical section."
+    },
+    {
+      "keywords": [
+        "sql",
+        "learn sql",
+        "sql interview"
+      ],
+      "answer": "For Sql interviews, ensure you know the core concepts, common design patterns, and can write syntactically correct code on a whiteboard. Practice Sql specific interview questions in our technical section."
+    },
+    {
+      "keywords": [
+        "mongodb",
+        "learn mongodb",
+        "mongodb interview"
+      ],
+      "answer": "For Mongodb interviews, ensure you know the core concepts, common design patterns, and can write syntactically correct code on a whiteboard. Practice Mongodb specific interview questions in our technical section."
+    },
+    {
+      "keywords": [
+        "aws",
+        "learn aws",
+        "aws interview"
+      ],
+      "answer": "For Aws interviews, ensure you know the core concepts, common design patterns, and can write syntactically correct code on a whiteboard. Practice Aws specific interview questions in our technical section."
+    },
+    {
+      "keywords": [
+        "docker",
+        "learn docker",
+        "docker interview"
+      ],
+      "answer": "For Docker interviews, ensure you know the core concepts, common design patterns, and can write syntactically correct code on a whiteboard. Practice Docker specific interview questions in our technical section."
+    },
+    {
+      "keywords": [
+        "tcs",
+        "tcs interview",
+        "how to crack tcs"
+      ],
+      "answer": "TCS National Qualifier Test (NQT) focuses heavily on basic programming, aptitude, and verbal ability. Be prepared for a managerial round as well."
+    },
+    {
+      "keywords": [
+        "infosys",
+        "infosys interview",
+        "how to crack infosys"
+      ],
+      "answer": "Infosys interviews focus on OOPs, DBMS, and puzzles. Their coding round usually has 2-3 medium difficulty questions."
+    },
+    {
+      "keywords": [
+        "wipro",
+        "wipro interview",
+        "how to crack wipro"
+      ],
+      "answer": "Wipro's selection process includes an online assessment (Aptitude + Coding + Written English) followed by Technical and HR rounds."
+    },
+    {
+      "keywords": [
+        "cognizant",
+        "cognizant interview",
+        "how to crack cognizant"
+      ],
+      "answer": "Cognizant GenC tests your foundational CS knowledge and logical reasoning. GenC Next focuses more on advanced coding and problem-solving skills."
+    },
+    {
+      "keywords": [
+        "amazon",
+        "amazon interview",
+        "how to crack amazon"
+      ],
+      "answer": "Amazon focuses on Leadership Principles and high-level DSA (Trees, Graphs, DP). Practice writing clean code and explaining time/space complexities."
+    },
+    {
+      "keywords": [
+        "microsoft",
+        "microsoft interview",
+        "how to crack microsoft"
+      ],
+      "answer": "Microsoft interviews emphasize algorithms, system design, and debugging. You should be very comfortable with standard data structures."
+    },
+    {
+      "keywords": [
+        "google",
+        "google interview",
+        "how to crack google"
+      ],
+      "answer": "Google coding interviews are tough and focus on dynamic programming, graphs, and complex algorithms. They also evaluate 'Googliness' (cultural fit)."
+    },
+    {
+      "keywords": [
+        "dummy question 1",
+        "test 1"
+      ],
+      "answer": "This is a placeholder response 1 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 2",
+        "test 2"
+      ],
+      "answer": "This is a placeholder response 2 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 3",
+        "test 3"
+      ],
+      "answer": "This is a placeholder response 3 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 4",
+        "test 4"
+      ],
+      "answer": "This is a placeholder response 4 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 5",
+        "test 5"
+      ],
+      "answer": "This is a placeholder response 5 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 6",
+        "test 6"
+      ],
+      "answer": "This is a placeholder response 6 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 7",
+        "test 7"
+      ],
+      "answer": "This is a placeholder response 7 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 8",
+        "test 8"
+      ],
+      "answer": "This is a placeholder response 8 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 9",
+        "test 9"
+      ],
+      "answer": "This is a placeholder response 9 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 10",
+        "test 10"
+      ],
+      "answer": "This is a placeholder response 10 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 11",
+        "test 11"
+      ],
+      "answer": "This is a placeholder response 11 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 12",
+        "test 12"
+      ],
+      "answer": "This is a placeholder response 12 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 13",
+        "test 13"
+      ],
+      "answer": "This is a placeholder response 13 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 14",
+        "test 14"
+      ],
+      "answer": "This is a placeholder response 14 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 15",
+        "test 15"
+      ],
+      "answer": "This is a placeholder response 15 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 16",
+        "test 16"
+      ],
+      "answer": "This is a placeholder response 16 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 17",
+        "test 17"
+      ],
+      "answer": "This is a placeholder response 17 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 18",
+        "test 18"
+      ],
+      "answer": "This is a placeholder response 18 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 19",
+        "test 19"
+      ],
+      "answer": "This is a placeholder response 19 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 20",
+        "test 20"
+      ],
+      "answer": "This is a placeholder response 20 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 21",
+        "test 21"
+      ],
+      "answer": "This is a placeholder response 21 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 22",
+        "test 22"
+      ],
+      "answer": "This is a placeholder response 22 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 23",
+        "test 23"
+      ],
+      "answer": "This is a placeholder response 23 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 24",
+        "test 24"
+      ],
+      "answer": "This is a placeholder response 24 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 25",
+        "test 25"
+      ],
+      "answer": "This is a placeholder response 25 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 26",
+        "test 26"
+      ],
+      "answer": "This is a placeholder response 26 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 27",
+        "test 27"
+      ],
+      "answer": "This is a placeholder response 27 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 28",
+        "test 28"
+      ],
+      "answer": "This is a placeholder response 28 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 29",
+        "test 29"
+      ],
+      "answer": "This is a placeholder response 29 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 30",
+        "test 30"
+      ],
+      "answer": "This is a placeholder response 30 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 31",
+        "test 31"
+      ],
+      "answer": "This is a placeholder response 31 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 32",
+        "test 32"
+      ],
+      "answer": "This is a placeholder response 32 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 33",
+        "test 33"
+      ],
+      "answer": "This is a placeholder response 33 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 34",
+        "test 34"
+      ],
+      "answer": "This is a placeholder response 34 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 35",
+        "test 35"
+      ],
+      "answer": "This is a placeholder response 35 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 36",
+        "test 36"
+      ],
+      "answer": "This is a placeholder response 36 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 37",
+        "test 37"
+      ],
+      "answer": "This is a placeholder response 37 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 38",
+        "test 38"
+      ],
+      "answer": "This is a placeholder response 38 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 39",
+        "test 39"
+      ],
+      "answer": "This is a placeholder response 39 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 40",
+        "test 40"
+      ],
+      "answer": "This is a placeholder response 40 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 41",
+        "test 41"
+      ],
+      "answer": "This is a placeholder response 41 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 42",
+        "test 42"
+      ],
+      "answer": "This is a placeholder response 42 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 43",
+        "test 43"
+      ],
+      "answer": "This is a placeholder response 43 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 44",
+        "test 44"
+      ],
+      "answer": "This is a placeholder response 44 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 45",
+        "test 45"
+      ],
+      "answer": "This is a placeholder response 45 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 46",
+        "test 46"
+      ],
+      "answer": "This is a placeholder response 46 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 47",
+        "test 47"
+      ],
+      "answer": "This is a placeholder response 47 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 48",
+        "test 48"
+      ],
+      "answer": "This is a placeholder response 48 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 49",
+        "test 49"
+      ],
+      "answer": "This is a placeholder response 49 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 50",
+        "test 50"
+      ],
+      "answer": "This is a placeholder response 50 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 51",
+        "test 51"
+      ],
+      "answer": "This is a placeholder response 51 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 52",
+        "test 52"
+      ],
+      "answer": "This is a placeholder response 52 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 53",
+        "test 53"
+      ],
+      "answer": "This is a placeholder response 53 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 54",
+        "test 54"
+      ],
+      "answer": "This is a placeholder response 54 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 55",
+        "test 55"
+      ],
+      "answer": "This is a placeholder response 55 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 56",
+        "test 56"
+      ],
+      "answer": "This is a placeholder response 56 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 57",
+        "test 57"
+      ],
+      "answer": "This is a placeholder response 57 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 58",
+        "test 58"
+      ],
+      "answer": "This is a placeholder response 58 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 59",
+        "test 59"
+      ],
+      "answer": "This is a placeholder response 59 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 60",
+        "test 60"
+      ],
+      "answer": "This is a placeholder response 60 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 61",
+        "test 61"
+      ],
+      "answer": "This is a placeholder response 61 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 62",
+        "test 62"
+      ],
+      "answer": "This is a placeholder response 62 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 63",
+        "test 63"
+      ],
+      "answer": "This is a placeholder response 63 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 64",
+        "test 64"
+      ],
+      "answer": "This is a placeholder response 64 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 65",
+        "test 65"
+      ],
+      "answer": "This is a placeholder response 65 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 66",
+        "test 66"
+      ],
+      "answer": "This is a placeholder response 66 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 67",
+        "test 67"
+      ],
+      "answer": "This is a placeholder response 67 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 68",
+        "test 68"
+      ],
+      "answer": "This is a placeholder response 68 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 69",
+        "test 69"
+      ],
+      "answer": "This is a placeholder response 69 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 70",
+        "test 70"
+      ],
+      "answer": "This is a placeholder response 70 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 71",
+        "test 71"
+      ],
+      "answer": "This is a placeholder response 71 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 72",
+        "test 72"
+      ],
+      "answer": "This is a placeholder response 72 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 73",
+        "test 73"
+      ],
+      "answer": "This is a placeholder response 73 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 74",
+        "test 74"
+      ],
+      "answer": "This is a placeholder response 74 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 75",
+        "test 75"
+      ],
+      "answer": "This is a placeholder response 75 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 76",
+        "test 76"
+      ],
+      "answer": "This is a placeholder response 76 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 77",
+        "test 77"
+      ],
+      "answer": "This is a placeholder response 77 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 78",
+        "test 78"
+      ],
+      "answer": "This is a placeholder response 78 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 79",
+        "test 79"
+      ],
+      "answer": "This is a placeholder response 79 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 80",
+        "test 80"
+      ],
+      "answer": "This is a placeholder response 80 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 81",
+        "test 81"
+      ],
+      "answer": "This is a placeholder response 81 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 82",
+        "test 82"
+      ],
+      "answer": "This is a placeholder response 82 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 83",
+        "test 83"
+      ],
+      "answer": "This is a placeholder response 83 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 84",
+        "test 84"
+      ],
+      "answer": "This is a placeholder response 84 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 85",
+        "test 85"
+      ],
+      "answer": "This is a placeholder response 85 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 86",
+        "test 86"
+      ],
+      "answer": "This is a placeholder response 86 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 87",
+        "test 87"
+      ],
+      "answer": "This is a placeholder response 87 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 88",
+        "test 88"
+      ],
+      "answer": "This is a placeholder response 88 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 89",
+        "test 89"
+      ],
+      "answer": "This is a placeholder response 89 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 90",
+        "test 90"
+      ],
+      "answer": "This is a placeholder response 90 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 91",
+        "test 91"
+      ],
+      "answer": "This is a placeholder response 91 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 92",
+        "test 92"
+      ],
+      "answer": "This is a placeholder response 92 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 93",
+        "test 93"
+      ],
+      "answer": "This is a placeholder response 93 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 94",
+        "test 94"
+      ],
+      "answer": "This is a placeholder response 94 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 95",
+        "test 95"
+      ],
+      "answer": "This is a placeholder response 95 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 96",
+        "test 96"
+      ],
+      "answer": "This is a placeholder response 96 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 97",
+        "test 97"
+      ],
+      "answer": "This is a placeholder response 97 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 98",
+        "test 98"
+      ],
+      "answer": "This is a placeholder response 98 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 99",
+        "test 99"
+      ],
+      "answer": "This is a placeholder response 99 for general placement queries. Please be more specific in your question."
+    },
+    {
+      "keywords": [
+        "dummy question 100",
+        "test 100"
+      ],
+      "answer": "This is a placeholder response 100 for general placement queries. Please be more specific in your question."
+    }
+  ],
+  "searchJobs": [
+    {
+      "id": 1,
+      "title": "Service Associate",
+      "company": "PVR INOX Limited",
+      "location": "Dwarka, Delhi, Delhi",
+      "salary": "₹24,628 a month",
+      "easilyApply": true,
+      "tags": [
+        "Health insurance",
+        "Paid time off",
+        "Life insurance"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Fresher | US Chat Process",
+      "company": "G R Management",
+      "location": "Jaipur, Rajasthan",
+      "salary": "₹34,000 a month",
+      "easilyApply": true,
+      "tags": [
+        "Health insurance",
+        "Provident Fund"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Service Associate",
+      "company": "PVR INOX LTD",
+      "location": "Dwarka, Delhi, Delhi",
+      "salary": "₹18,000 - ₹20,000 a month",
+      "easilyApply": true,
+      "tags": [
+        "Health insurance",
+        "Provident Fund"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Job opportunity for Fresher Graduates In Pimpri...",
+      "company": "Tech Solutions",
+      "location": "Pimpri-Chinchwad, Maharashtra",
+      "salary": "₹20,000 a month",
+      "easilyApply": true,
+      "tags": [
+        "Full-time",
+        "Monday to Friday"
+      ]
+    }
+  ]
+}
