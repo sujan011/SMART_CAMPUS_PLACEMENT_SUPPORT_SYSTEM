@@ -94,6 +94,9 @@ export const AppProvider = ({ children }) => {
 
         try {
 
+            console.log(email);
+            console.log(password);
+
             const response = await api.login({
                 email,
                 password,
@@ -147,6 +150,7 @@ export const AppProvider = ({ children }) => {
             return {
                 success: false,
                 message:
+                    error.response?.data?.non_field_errors?.[0] ||
                     error.response?.data?.detail ||
                     "Login failed",
             };
@@ -168,6 +172,8 @@ export const AppProvider = ({ children }) => {
                 password2: userData.password,
 
                 phone: userData.phone,
+
+                role: "student",
 
             });
 
