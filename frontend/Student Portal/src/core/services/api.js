@@ -29,8 +29,18 @@ export const api = {
     getProfile: () =>
         API.get("/students/profile/"),
 
-    updateProfile: (data) =>
-        API.patch("/students/profile/", data),
+    updateProfile: (data) => {
+
+        if (data instanceof FormData) {
+            return API.patch("/students/profile/", data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+        }
+
+        return API.patch("/students/profile/", data);
+    },
 
     // -----------------------
     // Jobs

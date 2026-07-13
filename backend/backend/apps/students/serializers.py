@@ -35,6 +35,9 @@ class AchievementSerializer(serializers.ModelSerializer):
 
 class StudentProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)
+    username = serializers.CharField(source="user.username", read_only=True)
+    phone = serializers.CharField(source="user.phone", read_only=True)
+    role = serializers.CharField(source="user.role", read_only=True)
     academic_records = AcademicRecordSerializer(many=True, read_only=True)
     skills = SkillSerializer(many=True, read_only=True)
     projects = ProjectSerializer(many=True, read_only=True)
@@ -45,7 +48,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentProfile
         fields = [
-            "id", "email", "full_name", "profile_photo", "date_of_birth", "gender",
+            "id", "email", "username", "phone", "role", "full_name", "profile_photo", "date_of_birth", "gender",
             "address", "nationality", "languages_known", "about_me",
             "college", "branch", "enrollment_no", "cgpa", "passing_year", "current_year",
             "linkedin_url", "github_url", "portfolio_url", "is_verified",

@@ -11,14 +11,17 @@ export const ProfileProvider = ({ children }) => {
     
     // 1. Personal Info State
     const [personalInfo, setPersonalInfo] = useState({
-        fullName: '',
-        email: '',
-        phone: '',
-        dob: '',
-        gender: 'Male',
-        address: '',
-        nationality: 'Indian',
-        avatarUrl: 'https://via.placeholder.com/150',
+        fullName: "",
+        username: "",
+        email: "",
+        phone: "",
+        dob: "",
+        gender: "",
+        address: "",
+        nationality: "",
+        languages: [],
+        aboutMe: "",
+        avatarUrl: "",
     });
 
     // 2. Academic Summary State (for the summary widget)
@@ -40,39 +43,65 @@ export const ProfileProvider = ({ children }) => {
         linkedin: '',
     });
 
-    const fetchProfile = () => {
-        api.getProfile()
-            .then(res => {
-                const p = res.data;
-                setPersonalInfo({
-                    fullName: p.full_name || '',
-                    email: p.email || '',
-                    phone: p.phone || '',
-                    dob: p.date_of_birth || '',
-                    gender: p.gender === 'male' ? 'Male' : p.gender === 'female' ? 'Female' : 'Other',
-                    address: p.address || '',
-                    nationality: p.nationality || 'Indian',
-                    avatarUrl: p.profile_photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.full_name || 'Student')}`,
-                });
+    const fetchProfile = async () => {
+        try {
 
-                setAcademicSummary({
-                    college: p.college || '',
-                    branch: p.branch || '',
-                    enrollmentNo: p.enrollment_no || '',
-                    cgpa: p.cgpa ? `${p.cgpa} / 10` : '',
-                    passingYear: p.passing_year ? String(p.passing_year) : '',
-                    currentYear: p.current_year || '',
-                });
+            const { data: p } = await api.getProfile();
 
-                setSocialLinks({
-                    gmail: p.email || '',
-                    github: p.github_url || '',
-                    discord: '',
-                    x: p.portfolio_url || '',
-                    linkedin: p.linkedin_url || '',
-                });
-            })
-            .catch(console.error);
+            // ----------------------------
+            // Personal
+            // ----------------------------
+            console.log("PROFILE API RESPONSE:", p); //just to check
+            setPersonalInfo({
+                fullName: p.full_name || "",
+                email: p.email || "",
+                phone: p.phone || "",
+                username: p.username || "",
+                dob: p.date_of_birth || "",
+                gender:
+                    p.gender === "male"
+                        ? "Male"
+                        : p.gender === "female"
+                        ? "Female"
+                        : "Other",
+                address: p.address || "",
+                nationality: p.nationality || "",
+                languages: p.languages_known || [],
+                aboutMe: p.about_me || "",
+                avatarUrl:
+                    p.profile_photo ||
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                        p.full_name || "Student"
+                    )}`,
+            });
+
+            // ----------------------------
+            // Academic
+            // ----------------------------
+
+            setAcademicSummary({
+                college: p.college || "",
+                branch: p.branch || "",
+                enrollmentNo: p.enrollment_no || "",
+                cgpa: p.cgpa || "",
+                passingYear: p.passing_year || "",
+                currentYear: p.current_year || "",
+            });
+
+            // ----------------------------
+            // Social
+            // ----------------------------
+
+            setSocialLinks({
+                gmail: p.email || "",
+                github: p.github_url || "",
+                linkedin: p.linkedin_url || "",
+                portfolio: p.portfolio_url || "",
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     useEffect(() => {
@@ -81,19 +110,53 @@ export const ProfileProvider = ({ children }) => {
 
     // Handlers
     const updatePersonalInfo = async (updates) => {
-        setPersonalInfo(prev => ({ ...prev, ...updates }));
+
+        console.log(updates);
+
+        setPersonalInfo(prev => ({
+            ...prev,
+            ...updates,
+        }));
+
         try {
-            await api.updateProfile({
-                full_name: updates.fullName,
-                address: updates.address,
-                nationality: updates.nationality,
-                gender: updates.gender?.toLowerCase(),
-                date_of_birth: updates.dob || null,
-            });
+
+            const formData = new FormData();
+
+            formData.append(
+                "full_name",
+                updates.fullName && updates.fullName !== "undefined"
+                    ? updates.fullName
+                    : personalInfo.fullName
+            );
+            formData.append("address", updates.address || "");
+            formData.append("nationality", updates.nationality || "");
+            formData.append("gender", updates.gender?.toLowerCase() || "");
+            formData.append("date_of_birth", updates.dob || "");
+            formData.append("about_me", updates.aboutMe || "");
+            formData.append(
+                "languages_known",
+                JSON.stringify(updates.languages || [])
+            );
+
+            if (updates.profilePhoto) {
+                formData.append(
+                    "profile_photo",
+                    updates.profilePhoto
+                );
+            }
+
+            for (const pair of formData.entries()) {
+                console.log(pair[0], ":", pair[1]);
+            }
+
+            await api.updateProfile(formData);
+
             fetchProfile();
-        } catch (e) {
-            console.error("Failed to update personal info", e);
+
+        } catch (err) {
+            console.error(err);
         }
+
     };
 
     const updateAcademicSummary = async (updates) => {

@@ -162,19 +162,18 @@ export const AppProvider = ({ children }) => {
         try {
 
             const response = await api.register({
-
                 username: userData.username,
-
                 email: userData.email,
-
                 password: userData.password,
-
                 password2: userData.password,
-
                 phone: userData.phone,
-
                 role: "student",
 
+                full_name: userData.name,
+                college: userData.college,
+                branch: userData.department,
+                enrollment_no: userData.registrationNumber,
+                current_year: "",
             });
 
             // Save JWT Tokens

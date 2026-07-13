@@ -4,16 +4,18 @@ import { useProfile } from '../context/ProfileContext';
 export const PersonalInfoForm = ({ isEditing, setIsEditing }) => {
     const { personalInfo, updatePersonalInfo } = useProfile();
     const [localData, setLocalData] = useState(personalInfo);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
     
     // Available languages could be moved to context or fetched from an API, but keeping it simple here
     const availableLanguages = ['English', 'Hindi', 'Bengali', 'Marathi', 'Telugu', 'Tamil', 'Gujarati'];
-    const [languages, setLanguages] = useState(['English', 'Hindi']);
+    const [languages, setLanguages] = useState(localData.languages || []);
     const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
     // Sync local state when entering edit mode
     useEffect(() => {
         if (isEditing) {
             setLocalData(personalInfo);
+            setLanguages(personalInfo.languages || []);
         }
     }, [isEditing, personalInfo]);
 
@@ -22,7 +24,12 @@ export const PersonalInfoForm = ({ isEditing, setIsEditing }) => {
     };
 
     const handleSave = () => {
-        updatePersonalInfo(localData);
+        updatePersonalInfo({
+            ...localData,
+            languages,
+            profilePhoto: selectedPhoto,
+        });
+
         setIsEditing(false);
     };
 
@@ -39,6 +46,31 @@ export const PersonalInfoForm = ({ isEditing, setIsEditing }) => {
 
     return (
         <div>
+            <div className="flex items-center gap-6 mb-8">
+
+                <img
+                    src={
+                        selectedPhoto
+                            ? URL.createObjectURL(selectedPhoto)
+                            : personalInfo.avatarUrl
+                    }
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full object-cover border"
+                />
+
+                {isEditing && (
+                    <div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) =>
+                                setSelectedPhoto(e.target.files[0])
+                            }
+                        />
+                    </div>
+                )}
+
+            </div>
             <h3 className="text-lg font-bold text-gray-900 mb-6">Personal Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                 <InputField label="Full Name" value={isEditing ? localData.fullName : personalInfo.fullName} onChange={(val) => handleChange('fullName', val)} isEditing={isEditing} />
@@ -101,6 +133,24 @@ export const PersonalInfoForm = ({ isEditing, setIsEditing }) => {
                     </div>
                 </div>
             </div>
+            <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    About Me
+                </label>
+
+                <textarea
+                    rows="5"
+                    disabled={!isEditing}
+                    value={isEditing ? localData.aboutMe : personalInfo.aboutMe}
+                    onChange={(e) => handleChange("aboutMe", e.target.value)}
+                    className={`w-full p-3 border rounded-lg text-sm transition-colors ${
+                        isEditing
+                            ? "border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                            : "border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed"
+                    }`}
+                    placeholder="Write something about yourself..."
+                />
+            </div>            
             {isEditing && (
                 <div className="mt-8 flex justify-end">
                     <button onClick={handleSave} className="bg-blue-600 text-white px-8 py-2.5 rounded-lg text-sm font-bold shadow hover:bg-blue-700 transition">
