@@ -10,6 +10,13 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background: #F8FAFC;
   }
+  button, 
+  [type="button"], 
+  [type="reset"], 
+  [type="submit"], 
+  [role="button"] {
+    cursor: pointer;
+  }
 }
 
 @layer components {

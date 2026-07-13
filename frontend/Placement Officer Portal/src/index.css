@@ -137,6 +137,13 @@ html.theme-blue .text-\[\#4F46E5\] {
   body {
     @apply bg-background text-foreground antialiased;
   }
+  button, 
+  [type="button"], 
+  [type="reset"], 
+  [type="submit"], 
+  [role="button"] {
+    cursor: pointer;
+  }
 }
 
 @layer utilities {
