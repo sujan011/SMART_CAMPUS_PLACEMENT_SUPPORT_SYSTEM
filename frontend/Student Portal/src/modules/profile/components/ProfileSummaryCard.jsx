@@ -9,11 +9,13 @@ export const ProfileSummaryCard = ({ isEditing }) => {
 
     const handleAvatarUpload = (e) => {
         const file = e.target.files[0];
-        if (file) {
-            const newUrl = URL.createObjectURL(file);
-            updatePersonalInfo({ avatarUrl: newUrl });
-            setData({ user: { ...data.user, avatar: newUrl } });
-        }
+
+        if (!file) return;
+
+        updatePersonalInfo({
+            ...personalInfo,
+            profilePhoto: file,
+        });
     };
 
     return (
@@ -21,7 +23,15 @@ export const ProfileSummaryCard = ({ isEditing }) => {
             <div className="flex flex-col md:flex-row gap-8">
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:w-1/2">
                     <div className="relative shrink-0">
-                        <img src={personalInfo.avatarUrl} alt="Profile" className="w-28 h-28 rounded-2xl object-cover border border-gray-200 shadow-sm" />
+                        <img
+                            src={
+                                personalInfo.profilePhoto
+                                    ? URL.createObjectURL(personalInfo.profilePhoto)
+                                    : personalInfo.avatarUrl
+                            }
+                            alt="Profile"
+                            className="w-28 h-28 rounded-2xl object-cover border border-gray-200 shadow-sm"
+                        />
                         {isEditing && (
                             <button onClick={() => avatarInputRef.current?.click()} className="absolute -bottom-2 -right-2 bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-2 border-white shadow hover:bg-blue-700 transition">
                                 <i className="fa-solid fa-camera text-xs"></i>

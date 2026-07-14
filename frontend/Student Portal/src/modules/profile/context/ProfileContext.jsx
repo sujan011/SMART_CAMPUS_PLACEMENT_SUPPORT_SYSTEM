@@ -112,7 +112,7 @@ export const ProfileProvider = ({ children }) => {
 
     // Handlers
     const updatePersonalInfo = async (updates) => {
-
+        console.log("updatePersonalInfo called");
         console.log(updates);
 
         setPersonalInfo(prev => ({
@@ -148,12 +148,41 @@ export const ProfileProvider = ({ children }) => {
             }
 
             for (const pair of formData.entries()) {
-                console.log(pair[0], ":", pair[1]);
+                console.log(pair[0], pair[1]);
+
+                if (pair[1] instanceof File) {
+                    console.log("File name:", pair[1].name);
+                    console.log("File type:", pair[1].type);
+                    console.log("File size:", pair[1].size);
+                }
             }
 
-            await api.updateProfile(formData);
+            const { data } = await api.updateProfile(formData);
 
-            fetchProfile();
+            setPersonalInfo(prev => ({
+                ...prev,
+                fullName: data.full_name || "",
+                email: data.email || "",
+                phone: data.phone || "",
+                username: data.username || "",
+                dob: data.date_of_birth || "",
+                gender:
+                    data.gender === "male"
+                        ? "Male"
+                        : data.gender === "female"
+                        ? "Female"
+                        : "Other",
+                address: data.address || "",
+                nationality: data.nationality || "",
+                languages: data.languages_known || [],
+                aboutMe: data.about_me || "",
+                profilePhoto: null,
+                avatarUrl: data.profile_photo
+                    ? `http://127.0.0.1:8000${data.profile_photo}`
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                        data.full_name || "Student"
+                    )}`,
+            }));
 
         } catch (err) {
             console.error(err);

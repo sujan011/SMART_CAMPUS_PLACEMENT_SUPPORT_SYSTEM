@@ -24,6 +24,8 @@ export const PersonalInfoForm = ({ isEditing, setIsEditing }) => {
     };
 
     const handleSave = () => {
+        console.log("SAVE BUTTON CLICKED");
+        console.log("selectedPhoto =", selectedPhoto);
         updatePersonalInfo({
             ...localData,
             languages,
@@ -60,13 +62,15 @@ export const PersonalInfoForm = ({ isEditing, setIsEditing }) => {
 
                 {isEditing && (
                     <div>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) =>
-                                setSelectedPhoto(e.target.files[0])
-                            }
-                        />
+                    <input
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.webp"
+                        onChange={(e) => {
+                            const file = e.target.files[0];
+                            console.log("FILE SELECTED =", file);
+                            setSelectedPhoto(file);
+                        }}
+                    />
                     </div>
                 )}
 
