@@ -17,7 +17,7 @@ class ChatSessionSerializer(serializers.ModelSerializer):
 
 
 class SendMessageSerializer(serializers.Serializer):
-    session_id = serializers.IntegerField(required=False)
+    session_id = serializers.IntegerField(required=False, allow_null=True)
     message = serializers.CharField()
 
 

@@ -6,7 +6,7 @@ export const DashboardPage = () => {
     
     if (isLoading) return <div className="p-6 text-center text-gray-500">Loading dashboard...</div>;
     if (error) return <div className="p-6 text-center text-red-500">Error: {error}</div>;
-    if (!data) return null;
+    if (!data) return <div className="p-6 text-center text-gray-500">Loading your data...</div>;
 
     const { user, metrics, recommendedJobs, applications, upcomingInterviews } = data;
 
@@ -92,7 +92,7 @@ export const DashboardPage = () => {
                                         </p>
 
                                         <p className="text-xs text-gray-400">
-                                            {job.job_type.replace("_", " ")}
+                                            {job.job_type?.replace(/_/g, " ") || 'Full Time'}
                                         </p>
                                     </div>
 
@@ -200,16 +200,28 @@ export const DashboardPage = () => {
                     <div className="bg-white rounded-xl card-shadow p-5">
                         <h3 className="font-semibold text-gray-900 mb-4">Upcoming Interviews</h3>
                         <div className="space-y-3">
-                            {upcomingInterviews.map((interview, i) => (
-                                <div key={i} className="bg-gray-50 rounded-lg p-3 flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700 font-bold text-sm">{interview.company[0]}</div>
-                                    <div className="flex-1">
-                                        <div className="font-medium text-gray-900 text-sm">{interview.company}</div>
-                                        <div className="text-xs text-gray-500">{interview.role} • {interview.time}</div>
+                            {upcomingInterviews.length === 0 ? (
+                                <div className="text-sm text-gray-400 text-center py-4">No upcoming interviews.</div>
+                            ) : (
+                                upcomingInterviews.map((interview, i) => (
+                                    <div key={i} className="bg-gray-50 rounded-lg p-3 flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700 font-bold text-sm">
+                                            {interview.mode?.[0]?.toUpperCase() || 'I'}
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="font-medium text-gray-900 text-sm">
+                                                {interview.mode === 'online' ? 'Online Interview' : interview.mode === 'in_person' ? 'In-Person Interview' : 'Interview'}
+                                            </div>
+                                            <div className="text-xs text-gray-500">
+                                                {new Date(interview.scheduled_at).toLocaleString()} • {interview.duration_minutes} min
+                                            </div>
+                                        </div>
+                                        <span className="text-xs text-gray-400">
+                                            {interview.venue || (interview.meeting_link ? 'Online' : 'TBD')}
+                                        </span>
                                     </div>
-                                    <span className="text-xs text-gray-400">{interview.location}</span>
-                                </div>
-                            ))}
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>

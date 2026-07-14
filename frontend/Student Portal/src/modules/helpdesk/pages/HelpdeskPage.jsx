@@ -1,6 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { api } from '../../../core/services/api';
 
+// Simple markdown renderer: bold, newlines, bullet points
+const renderMarkdown = (text) => {
+    const lines = text.split('\n');
+    return lines.map((line, i) => {
+        // Bold: **text**
+        const parts = line.split(/\*\*(.*?)\*\*/g);
+        const rendered = parts.map((part, j) => j % 2 === 1 ? <strong key={j}>{part}</strong> : part);
+        return <span key={i}>{rendered}{i < lines.length - 1 && <br />}</span>;
+    });
+};
+
 export const HelpdeskPage = () => {
     const [messages, setMessages] = useState([
         { role: 'bot', text: 'Hi there! I am your AI Helpdesk assistant. Ask me anything about your placement preparation, resume, or upcoming interviews.' }
@@ -27,7 +38,10 @@ export const HelpdeskPage = () => {
         setInput('');
         setIsTyping(true);
 
-        api.sendChatMessage({ message: userQuery, session_id: sessionId })
+        const body = { message: userQuery };
+        if (sessionId) body.session_id = sessionId;
+
+        api.sendChatMessage(body)
             .then(res => {
                 const { reply, session_id } = res.data;
                 if (session_id) {
@@ -70,7 +84,7 @@ export const HelpdeskPage = () => {
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             <div className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm shadow-sm ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white border border-gray-200 text-gray-800 rounded-tl-none'}`}>
-                                {msg.text}
+                                {msg.role === 'bot' ? renderMarkdown(msg.text) : msg.text}
                             </div>
                         </div>
                     ))}

@@ -86,17 +86,17 @@ export const AppProvider = ({ children }) => {
                         placementReadiness: dashboard.resume_score,
                         applications: dashboard.applications,
                         inProgress: 0,
-                        upcomingInterviews: dashboard.upcoming_interviews.length,
+                        upcomingInterviews: dashboard.upcoming_interviews?.length || 0,
                         nextInterview:
-                            dashboard.upcoming_interviews.length > 0
+                            dashboard.upcoming_interviews?.length > 0
                                 ? dashboard.upcoming_interviews[0].scheduled_at
                                 : "No Interview",
                         progressScore: dashboard.profile_completion,
                     },
 
-                    recommendedJobs: dashboard.recommended_jobs,
-                    applications: dashboard.recent_applications,
-                    upcomingInterviews: dashboard.upcoming_interviews,
+                    recommendedJobs: dashboard.recommended_jobs || [],
+                    applications: dashboard.recent_applications || [],
+                    upcomingInterviews: dashboard.upcoming_interviews || [],
                     notifications: initialNotifications,
                 });
 
@@ -126,9 +126,6 @@ export const AppProvider = ({ children }) => {
 
         try {
 
-            console.log(email);
-            console.log(password);
-
             const response = await api.login({
                 email,
                 password,
@@ -142,49 +139,77 @@ export const AppProvider = ({ children }) => {
             setCurrentUser(userResponse.data);
             setIsAuthenticated(true);
 
-            const dashboardResponse = await api.getDashboardData();
-
-            const dashboard = dashboardResponse.data;
-
-            // Load notifications
-            let initialNotifications = [];
+            // Try to load dashboard data — but don't block login if it fails
             try {
-                const notifResponse = await api.getNotifications();
-                const list = notifResponse.data.results || notifResponse.data || [];
-                initialNotifications = list.map(n => ({
-                    ...n,
-                    read: n.is_read,
-                    time: formatTime(n.created_at)
-                }));
-            } catch (e) {
-                console.error("Failed to load initial notifications:", e);
+                const dashboardResponse = await api.getDashboardData();
+                const dashboard = dashboardResponse.data;
+
+                // Load notifications
+                let initialNotifications = [];
+                try {
+                    const notifResponse = await api.getNotifications();
+                    const list = notifResponse.data.results || notifResponse.data || [];
+                    initialNotifications = list.map(n => ({
+                        ...n,
+                        read: n.is_read,
+                        time: formatTime(n.created_at)
+                    }));
+                } catch (e) {
+                    console.error("Failed to load initial notifications:", e);
+                }
+
+                setData({
+                    user: {
+                        name: userResponse.data.username,
+                        department: userResponse.data.department || "Student",
+                        avatar:
+                            userResponse.data.avatar ||
+                            "https://ui-avatars.com/api/?name=" +
+                                encodeURIComponent(userResponse.data.username),
+                    },
+
+                    metrics: {
+                        profileCompletion: dashboard.profile_completion,
+                        placementReadiness: dashboard.resume_score,
+                        applications: dashboard.applications,
+                        inProgress: 0,
+                        upcomingInterviews: dashboard.upcoming_interviews?.length || 0,
+                        nextInterview:
+                            dashboard.upcoming_interviews?.length > 0
+                                ? dashboard.upcoming_interviews[0].scheduled_at
+                                : "No Interview",
+                        progressScore: dashboard.profile_completion,
+                    },
+
+                    recommendedJobs: dashboard.recommended_jobs || [],
+                    applications: dashboard.recent_applications || [],
+                    upcomingInterviews: dashboard.upcoming_interviews || [],
+                    notifications: initialNotifications,
+                });
+            } catch (dashErr) {
+                console.error("Dashboard load failed after login:", dashErr);
+                // Set minimal data so UI doesn't crash
+                setData({
+                    user: {
+                        name: userResponse.data.username,
+                        department: "Student",
+                        avatar: "https://ui-avatars.com/api/?name=" + encodeURIComponent(userResponse.data.username),
+                    },
+                    metrics: {
+                        profileCompletion: 0,
+                        placementReadiness: 0,
+                        applications: 0,
+                        inProgress: 0,
+                        upcomingInterviews: 0,
+                        nextInterview: "No Interview",
+                        progressScore: 0,
+                    },
+                    recommendedJobs: [],
+                    applications: [],
+                    upcomingInterviews: [],
+                    notifications: [],
+                });
             }
-
-            setData({
-                user: {
-                    name: userResponse.data.username,
-                    department: userResponse.data.department || "Student",
-                    avatar:
-                        userResponse.data.avatar ||
-                        "https://ui-avatars.com/api/?name=" +
-                            encodeURIComponent(userResponse.data.username),
-                },
-
-                metrics: {
-                    profileCompletion: dashboard.profile_completion,
-                    placementReadiness: dashboard.resume_score,
-                    applications: dashboard.applications,
-                    inProgress: 0,
-                    upcomingInterviews: dashboard.upcoming_interviews,
-                    nextInterview: "No Interview",
-                    progressScore: dashboard.profile_completion,
-                },
-
-                recommendedJobs: [],
-                applications: dashboard.recent_applications,
-                upcomingInterviews: [],
-                notifications: initialNotifications,
-            });
 
             return {
                 success: true,

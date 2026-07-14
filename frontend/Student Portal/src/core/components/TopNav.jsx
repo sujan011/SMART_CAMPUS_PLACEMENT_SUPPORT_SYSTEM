@@ -73,8 +73,8 @@ export const TopNav = () => {
                     {showDropdown && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                             <div className="px-4 py-2 border-b border-gray-100">
-                                <div className="text-sm font-medium text-gray-900">{data.user.name}</div>
-                                <div className="text-xs text-gray-500">{data.user.department}</div>
+                                <div className="text-sm font-medium text-gray-900">{data?.user?.name || currentUser?.username || 'Student'}</div>
+                                <div className="text-xs text-gray-500">{data?.user?.department || currentUser?.role || 'Student'}</div>
                             </div>
                             <Link to="/profile" onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 cursor-pointer"><i className="fa-regular fa-user mr-2"></i> Profile</Link>
                             <Link to="/settings" onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 cursor-pointer"><i className="fa-regular fa-gear mr-2"></i> Settings</Link>

@@ -3,7 +3,9 @@ import { useApp } from '../../../core/context/AppContext';
 
 export const AnalyticsPage = () => {
     const { data } = useApp();
-    const metrics = data.metrics;
+    const metrics = data?.metrics;
+
+    if (!data) return <div className="p-6 text-center text-gray-500">Loading analytics...</div>;
 
     const applications = data?.applications || [];
 
