@@ -56,12 +56,14 @@ class JobViewSet(viewsets.ModelViewSet):
 
             # Branch Check
             if job.eligible_branches:
-
-                if profile.branch not in job.eligible_branches:
+                if not profile.branch or profile.branch not in job.eligible_branches:
                     continue
 
             # CGPA Check
-            if profile.cgpa < job.min_cgpa:
+            if profile.cgpa is None:
+                if job.min_cgpa > 0:
+                    continue
+            elif profile.cgpa < job.min_cgpa:
                 continue
 
             eligible_jobs.append(job.id)

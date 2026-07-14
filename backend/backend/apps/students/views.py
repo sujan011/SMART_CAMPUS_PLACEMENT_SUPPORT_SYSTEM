@@ -113,7 +113,7 @@ class StudentListView(generics.ListAPIView):
     """GET /api/students/  -- for placement officers/admins to browse & verify students"""
     serializer_class = StudentProfileSerializer
     permission_classes = [IsOfficerOrAdmin]
-    queryset = StudentProfile.objects.all().order_by("-created_at")
+    queryset = StudentProfile.objects.filter(user__role="student").order_by("-created_at")
     filterset_fields = ["is_verified", "branch", "passing_year"]
     search_fields = ["full_name", "college", "enrollment_no"]
 

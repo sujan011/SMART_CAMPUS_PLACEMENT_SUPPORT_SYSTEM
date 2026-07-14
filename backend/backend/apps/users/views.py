@@ -1,4 +1,5 @@
 from django.contrib.auth import update_session_auth_hash
+# pyrefly: ignore [missing-import]
 from rest_framework import status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -26,7 +27,8 @@ class RegisterView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        # TODO: send email verification link using apps.users.utils.send_verification_email(user)
+        from apps.users.utils import send_verification_email
+        send_verification_email(user)
 
         refresh = RefreshToken.for_user(user)
         return Response(
@@ -107,7 +109,14 @@ class ForgotPasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data["email"]
 
-        # TODO: generate PasswordResetToken + email it via apps.users.utils.send_reset_email
+        from apps.users.utils import generate_password_reset_token, send_reset_email
+        try:
+            user = User.objects.get(email=email)
+            token_obj = generate_password_reset_token(user)
+            send_reset_email(user, token_obj.token)
+        except User.DoesNotExist:
+            pass
+
         # Always return 200 regardless of whether email exists, to avoid user enumeration
         return Response({"detail": "If that email exists, a reset link has been sent."})
 
@@ -120,8 +129,26 @@ class ResetPasswordView(APIView):
         serializer = ResetPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        # TODO: look up PasswordResetToken, validate expiry/is_used, set new password
-        return Response({"detail": "Password has been reset successfully."})
+        from django.utils import timezone
+        from .models import PasswordResetToken
+        token_str = serializer.validated_data["token"]
+        new_password = serializer.validated_data["new_password"]
+
+        try:
+            reset_token = PasswordResetToken.objects.get(
+                token=token_str,
+                is_used=False,
+                expires_at__gt=timezone.now()
+            )
+            user = reset_token.user
+            user.set_password(new_password)
+            user.save()
+
+            reset_token.is_used = True
+            reset_token.save()
+            return Response({"detail": "Password has been reset successfully."})
+        except PasswordResetToken.DoesNotExist:
+            return Response({"detail": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class VerifyEmailView(APIView):
@@ -129,5 +156,21 @@ class VerifyEmailView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, token):
-        # TODO: look up EmailVerificationToken, mark user.is_email_verified = True
-        return Response({"detail": "Email verified successfully."})
+        from django.utils import timezone
+        from .models import EmailVerificationToken
+
+        try:
+            verify_token = EmailVerificationToken.objects.get(
+                token=token,
+                is_used=False,
+                expires_at__gt=timezone.now()
+            )
+            user = verify_token.user
+            user.is_email_verified = True
+            user.save()
+
+            verify_token.is_used = True
+            verify_token.save()
+            return Response({"detail": "Email verified successfully."})
+        except EmailVerificationToken.DoesNotExist:
+            return Response({"detail": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)

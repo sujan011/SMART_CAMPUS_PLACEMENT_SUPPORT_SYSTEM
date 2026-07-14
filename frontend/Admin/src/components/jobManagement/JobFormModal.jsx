@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from "react";
 
+const initialState = {
+  title: "",
+  companyId: "",
+  job_type: "full_time",
+  location: "",
+  salary_min: "",
+  salary_max: "",
+  application_deadline: "",
+  is_active: true,
+  description: "",
+};
+
 export default function JobFormModal({
   isOpen,
   onClose,
@@ -9,18 +21,6 @@ export default function JobFormModal({
   isSaving,
   formError,
 }) {
-  const initialState = {
-    title: "",
-    companyId: "",
-    job_type: "full_time",
-    location: "",
-    salary_min: "",
-    salary_max: "",
-    application_deadline: "",
-    is_active: true,
-    description: "",
-  };
-
   const [formData, setFormData] = useState(initialState);
   const [localError, setLocalError] = useState("");
 

@@ -19,4 +19,75 @@ API.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+// Automatically refresh token on 401 response
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+    failedQueue.forEach(prom => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+    failedQueue = [];
+};
+
+API.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            if (isRefreshing) {
+                return new Promise((resolve, reject) => {
+                    failedQueue.push({ resolve, reject });
+                }).then(token => {
+                    originalRequest.headers.Authorization = `Bearer ${token}`;
+                    return API(originalRequest);
+                }).catch(err => Promise.reject(err));
+            }
+
+            originalRequest._retry = true;
+            isRefreshing = true;
+
+            const refreshToken = localStorage.getItem("placement_refresh");
+            if (!refreshToken) {
+                // No refresh token, clear storage and redirect to login
+                localStorage.removeItem("placement_access");
+                localStorage.removeItem("placement_refresh");
+                localStorage.removeItem("placementUser");
+                window.location.href = "/signin";
+                return Promise.reject(error);
+            }
+
+            try {
+                const res = await axios.post("http://127.0.0.1:8000/api/auth/token/refresh/", {
+                    refresh: refreshToken,
+                });
+                const newAccessToken = res.data.access;
+                localStorage.setItem("placement_access", newAccessToken);
+                API.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+                processQueue(null, newAccessToken);
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return API(originalRequest);
+            } catch (refreshError) {
+                processQueue(refreshError, null);
+                // Refresh failed — clear storage and redirect to login
+                localStorage.removeItem("placement_access");
+                localStorage.removeItem("placement_refresh");
+                localStorage.removeItem("placementUser");
+                window.location.href = "/signin";
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
+            }
+        }
+
+        return Promise.reject(error);
+    }
+);
+
 export default API;
+

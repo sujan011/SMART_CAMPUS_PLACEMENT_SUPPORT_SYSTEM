@@ -2,6 +2,23 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import { api } from '../services/api';
 const AppContext = createContext(null);
 
+const formatTime = (dateString) => {
+    try {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        if (diffMins < 1) return "Just now";
+        if (diffMins < 60) return `${diffMins}m ago`;
+        const diffHours = Math.floor(diffMins / 60);
+        if (diffHours < 24) return `${diffHours}h ago`;
+        const diffDays = Math.floor(diffHours / 24);
+        return `${diffDays}d ago`;
+    } catch (e) {
+        return dateString;
+    }
+};
+
 export const AppProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -41,6 +58,20 @@ export const AppProvider = ({ children }) => {
 
                 const dashboard = dashboardResponse.data;
 
+                // Load notifications
+                let initialNotifications = [];
+                try {
+                    const notifResponse = await api.getNotifications();
+                    const list = notifResponse.data.results || notifResponse.data || [];
+                    initialNotifications = list.map(n => ({
+                        ...n,
+                        read: n.is_read,
+                        time: formatTime(n.created_at)
+                    }));
+                } catch (e) {
+                    console.error("Failed to load initial notifications:", e);
+                }
+
                 setData({
                     user: {
                         name: userResponse.data.username,
@@ -66,6 +97,7 @@ export const AppProvider = ({ children }) => {
                     recommendedJobs: dashboard.recommended_jobs,
                     applications: dashboard.recent_applications,
                     upcomingInterviews: dashboard.upcoming_interviews,
+                    notifications: initialNotifications,
                 });
 
             } catch (error) {
@@ -114,6 +146,20 @@ export const AppProvider = ({ children }) => {
 
             const dashboard = dashboardResponse.data;
 
+            // Load notifications
+            let initialNotifications = [];
+            try {
+                const notifResponse = await api.getNotifications();
+                const list = notifResponse.data.results || notifResponse.data || [];
+                initialNotifications = list.map(n => ({
+                    ...n,
+                    read: n.is_read,
+                    time: formatTime(n.created_at)
+                }));
+            } catch (e) {
+                console.error("Failed to load initial notifications:", e);
+            }
+
             setData({
                 user: {
                     name: userResponse.data.username,
@@ -137,6 +183,7 @@ export const AppProvider = ({ children }) => {
                 recommendedJobs: [],
                 applications: dashboard.recent_applications,
                 upcomingInterviews: [],
+                notifications: initialNotifications,
             });
 
             return {

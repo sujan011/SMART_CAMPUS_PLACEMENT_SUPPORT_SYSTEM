@@ -11,7 +11,6 @@ import { api } from "../services/api";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("All");
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -21,7 +20,6 @@ export default function Users() {
   const [editingUser, setEditingUser] = useState(null);
 
   const fetchUsers = () => {
-    setLoading(true);
     Promise.all([
       api.getStudents(),
       api.getCompanies()
@@ -46,11 +44,9 @@ export default function Users() {
       }));
 
       setUsers([...studentList, ...companyList]);
-      setLoading(false)
     })
     .catch(err => {
       console.error(err);
-      setLoading(false);
     });
   };
 

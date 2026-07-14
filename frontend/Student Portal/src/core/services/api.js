@@ -184,4 +184,16 @@ export const api = {
 
     deleteCertification: (id) =>
         API.delete(`/students/certifications/${id}/`),
+
+    // -----------------------
+    // Notifications
+    // -----------------------
+    getNotifications: () =>
+        API.get("/notifications/"),
+
+    markNotificationRead: (id) =>
+        API.post(`/notifications/${id}/read/`),
+
+    markAllNotificationsRead: () =>
+        API.post("/notifications/mark-all-read/"),
 };

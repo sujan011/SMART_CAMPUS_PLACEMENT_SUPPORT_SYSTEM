@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
 
+const initialState = {
+  name: "",
+  website: "",
+  industry: "IT",
+  headquarters: "",
+  company_size: "",
+  description: "",
+};
+
 export default function CompanyFormModal({
   isOpen,
   onClose,
@@ -8,15 +17,6 @@ export default function CompanyFormModal({
   isSaving,
   formError,
 }) {
-  const initialState = {
-    name: "",
-    website: "",
-    industry: "IT",
-    headquarters: "",
-    company_size: "",
-    description: "",
-  };
-
   const [formData, setFormData] = useState(initialState);
   const [localError, setLocalError] = useState("");
 

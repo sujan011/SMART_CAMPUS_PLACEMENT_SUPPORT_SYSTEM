@@ -49,17 +49,19 @@ export default function Notifications() {
     }
   };
 
-  const handleBroadcast = (e) => {
+  const handleBroadcast = async (e) => {
     e.preventDefault();
     if (!announceTitle || !announceMessage) return;
 
     setSending(true);
-    // Simulating sending a broadcast announcement notification to students in targetBranch
-    setTimeout(() => {
-      setSending(false);
+    try {
+      await api.broadcastNotification({
+        title: announceTitle,
+        message: announceMessage,
+        target_branch: targetBranch,
+      });
+
       setSuccessMsg(`Announcement "${announceTitle}" broadcasted successfully to ${targetBranch} branch students!`);
-      setAnnounceTitle("");
-      setAnnounceMessage("");
       
       // Add it as a local confirmation alert in the admin's inbox
       setNotifications(prev => [
@@ -74,8 +76,14 @@ export default function Notifications() {
         ...prev
       ]);
 
+      setAnnounceTitle("");
+      setAnnounceMessage("");
       setTimeout(() => setSuccessMsg(""), 5000);
-    }, 1200);
+    } catch (err) {
+      console.error("Failed to broadcast announcement", err);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (

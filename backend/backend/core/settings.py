@@ -3,6 +3,7 @@ Django settings for Smart Campus Placement Support System.
 """
 from pathlib import Path
 from datetime import timedelta
+# pyrefly: ignore [missing-import]
 from decouple import config, Csv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -166,3 +167,10 @@ GEMINI_API_KEY = config("GEMINI_API_KEY", default="")
 OPENAI_API_KEY = config("OPENAI_API_KEY", default="")
 
 FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:5173")
+
+# ---------------------------------------------------------------------
+# Email Configuration
+# ---------------------------------------------------------------------
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@smartcampus.edu"
+

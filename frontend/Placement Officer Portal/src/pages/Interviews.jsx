@@ -37,7 +37,79 @@ const ScheduleInterviewsDashboard = () => {
     });
   }, []);
 
-  const [selectedCandidates, setSelectedCandidates] = useState([1, 2]);
+  const [selectedCandidates, setSelectedCandidates] = useState([]);
+
+  // Filtering, search & pagination states for Candidates Table
+  const [candidateSearchQuery, setCandidateSearchQuery] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('All Departments');
+  const [selectedStatus, setSelectedStatus] = useState('All Status');
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+
+  // Filter candidates dynamically based on search, department, and status
+  const filteredCandidates = React.useMemo(() => {
+    return candidates.filter(candidate => {
+      const matchesSearch = 
+        candidate.name.toLowerCase().includes(candidateSearchQuery.toLowerCase()) ||
+        candidate.roll.toLowerCase().includes(candidateSearchQuery.toLowerCase()) ||
+        candidate.email.toLowerCase().includes(candidateSearchQuery.toLowerCase());
+      
+      const matchesDept = 
+        selectedDepartment === 'All Departments' || 
+        candidate.dept.toLowerCase() === selectedDepartment.toLowerCase();
+
+      const matchesStatus = 
+        selectedStatus === 'All Status' || 
+        candidate.status.toLowerCase() === selectedStatus.toLowerCase();
+
+      return matchesSearch && matchesDept && matchesStatus;
+    });
+  }, [candidates, candidateSearchQuery, selectedDepartment, selectedStatus]);
+
+  // Compute unique department options dynamically from data
+  const departmentsList = React.useMemo(() => {
+    const depts = new Set(candidates.map(c => c.dept).filter(Boolean));
+    return ['All Departments', ...Array.from(depts)];
+  }, [candidates]);
+
+  // Compute unique status options dynamically from data
+  const statusesList = React.useMemo(() => {
+    const statuses = new Set(candidates.map(c => c.status).filter(Boolean));
+    return ['All Status', ...Array.from(statuses)];
+  }, [candidates]);
+
+  // Total pages
+  const totalCandidates = filteredCandidates.length;
+  const totalPages = Math.ceil(totalCandidates / pageSize) || 1;
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [candidateSearchQuery, selectedDepartment, selectedStatus]);
+
+  // Sliced candidates for current page
+  const paginatedCandidates = React.useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredCandidates.slice(startIndex, startIndex + pageSize);
+  }, [filteredCandidates, currentPage]);
+
+  // Page level Select All Checkbox Handler
+  const handleSelectAllToggle = () => {
+    const pageCandidateIds = paginatedCandidates.map(c => c.id);
+    const allSelected = pageCandidateIds.every(id => selectedCandidates.includes(id));
+
+    if (allSelected) {
+      setSelectedCandidates(prev => prev.filter(id => !pageCandidateIds.includes(id)));
+    } else {
+      setSelectedCandidates(prev => {
+        const union = new Set([...prev, ...pageCandidateIds]);
+        return Array.from(union);
+      });
+    }
+  };
+
+  const isAllPageCandidatesSelected = paginatedCandidates.length > 0 && 
+    paginatedCandidates.map(c => c.id).every(id => selectedCandidates.includes(id));
 
   // Form states
   const [selectedCompany, setSelectedCompany] = useState("TCS");
@@ -404,18 +476,36 @@ const ScheduleInterviewsDashboard = () => {
             <div className="flex flex-col md:flex-row gap-3 mb-6">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                <input type="text" placeholder="Search candidates by name, roll no..." className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:border-transparent bg-slate-50" />
+                <input 
+                  type="text" 
+                  placeholder="Search candidates by name, roll no..." 
+                  value={candidateSearchQuery}
+                  onChange={(e) => setCandidateSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:border-transparent bg-slate-50" 
+                />
               </div>
               <div className="flex gap-3 overflow-x-auto pb-1 md:pb-0">
                 <div className="relative shrink-0">
-                  <select className="px-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-700 font-medium appearance-none pr-9 min-w-[150px] bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4F46E5]">
-                    <option>All Departments</option>
+                  <select 
+                    value={selectedDepartment}
+                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                    className="px-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-700 font-medium appearance-none pr-9 min-w-[150px] bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4F46E5]"
+                  >
+                    {departmentsList.map(dept => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" size={16} />
                 </div>
                 <div className="relative shrink-0">
-                  <select className="px-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-700 font-medium appearance-none pr-9 min-w-[130px] bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4F46E5]">
-                    <option>All Status</option>
+                  <select 
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                    className="px-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-700 font-medium appearance-none pr-9 min-w-[130px] bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4F46E5]"
+                  >
+                    {statusesList.map(st => (
+                      <option key={st} value={st}>{st}</option>
+                    ))}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" size={16} />
                 </div>
@@ -431,7 +521,12 @@ const ScheduleInterviewsDashboard = () => {
                 <thead className="text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50 border-b border-slate-100">
                   <tr>
                     <th className="p-4 w-12 text-center">
-                      <input type="checkbox" className="rounded border-slate-300 text-[#4F46E5] focus:ring-[#4F46E5]" />
+                      <input 
+                        type="checkbox" 
+                        checked={isAllPageCandidatesSelected}
+                        onChange={handleSelectAllToggle}
+                        className="rounded border-slate-300 text-[#4F46E5] focus:ring-[#4F46E5] cursor-pointer" 
+                      />
                     </th>
                     <th className="p-4">Candidate</th>
                     <th className="p-4">Roll No.</th>
@@ -448,14 +543,14 @@ const ScheduleInterviewsDashboard = () => {
                         Loading candidates...
                       </td>
                     </tr>
-                  ) : candidates.length === 0 ? (
+                  ) : filteredCandidates.length === 0 ? (
                     <tr>
                       <td colSpan="7" className="p-8 text-center text-slate-500">
                         No candidates found.
                       </td>
                     </tr>
                   ) : (
-                    candidates.map((c, i) => (
+                    paginatedCandidates.map((c, i) => (
                       <tr key={c.id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
                         <td className="p-4 text-center">
                           <input 
@@ -489,16 +584,43 @@ const ScheduleInterviewsDashboard = () => {
 
             {/* Pagination Footer */}
             <div className="flex flex-col sm:flex-row items-center justify-between mt-0 p-4 border border-slate-100 rounded-xl rounded-t-none bg-slate-50/30 gap-4">
-              <p className="text-sm font-medium text-slate-500">Showing 1 to 5 of 25 candidates</p>
-              <div className="flex items-center gap-1">
-                <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors"><ChevronLeft size={16}/></button>
-                <button className="w-8 h-8 flex items-center justify-center bg-[#4F46E5] text-white font-bold rounded-md shadow-sm">1</button>
-                <button className="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-100 font-semibold rounded-md transition-colors">2</button>
-                <button className="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-100 font-semibold rounded-md transition-colors">3</button>
-                <span className="w-8 h-8 flex items-center justify-center text-slate-400 font-bold">...</span>
-                <button className="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-100 font-semibold rounded-md transition-colors">5</button>
-                <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors"><ChevronRight size={16}/></button>
-              </div>
+              <p className="text-sm font-medium text-slate-500">
+                {totalCandidates === 0 
+                  ? "Showing 0 to 0 of 0 candidates" 
+                  : `Showing ${Math.min((currentPage - 1) * pageSize + 1, totalCandidates)} to ${Math.min(currentPage * pageSize, totalCandidates)} of ${totalCandidates} candidates`
+                }
+              </p>
+              {totalPages > 1 && (
+                <div className="flex items-center gap-1">
+                  <button 
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
+                  >
+                    <ChevronLeft size={16}/>
+                  </button>
+                  {Array.from({ length: totalPages }, (_, idx) => idx + 1).map(page => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-8 h-8 flex items-center justify-center rounded-md font-semibold text-sm transition-colors ${
+                        currentPage === page 
+                          ? 'bg-[#4F46E5] text-white shadow-sm font-bold' 
+                          : 'text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                  <button 
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
+                  >
+                    <ChevronRight size={16}/>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

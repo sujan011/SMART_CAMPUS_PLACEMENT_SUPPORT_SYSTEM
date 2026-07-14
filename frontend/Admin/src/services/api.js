@@ -70,4 +70,7 @@ export const api = {
 
     markAllNotificationsRead: () =>
         API.post("/notifications/mark-all-read/"),
+
+    broadcastNotification: (data) =>
+        API.post("/notifications/broadcast/", data),
 };

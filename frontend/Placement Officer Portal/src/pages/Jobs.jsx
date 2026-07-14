@@ -45,7 +45,7 @@ const Jobs = () => {
   const [newCompany, setNewCompany] = useState({ name: '', location: '' });
 
   const [showJobForm, setShowJobForm] = useState(false);
-  const [newJob, setNewJob] = useState({ companyId: '', role: '', package: '', working: 'Remote', schedule: 'Full-time' });
+  const [newJob, setNewJob] = useState({ companyId: '', role: '', package: '', working: 'Remote', schedule: 'Full-time', deadline: '' });
 
   // Search State
   const [searchQuery, setSearchQuery] = useState('');
@@ -88,13 +88,14 @@ const Jobs = () => {
   // --- Handlers for Jobs ---
   const handleAddJob = async (e) => {
     e.preventDefault();
-    if (!newJob.companyId || !newJob.role.trim() || !newJob.package.trim()) {
-      alert('Please fill out all job fields and select a company.');
+    if (!newJob.companyId || !newJob.role.trim() || !newJob.package.trim() || !newJob.deadline) {
+      alert('Please fill out all job fields, select a company, and choose a deadline.');
       return;
     }
     
     const rawVal = parseFloat(newJob.package.replace(/[^0-9.]/g, '')) || 0;
     const salary = rawVal < 100 ? rawVal * 100000 : rawVal;
+    const formattedDeadline = `${newJob.deadline}T23:59:59Z`;
 
     try {
       const res = await api.createJob({
@@ -104,6 +105,7 @@ const Jobs = () => {
         salary_max: salary,
         is_remote: newJob.working === "Remote",
         job_type: newJob.schedule === "Full-time" ? "full_time" : "internship",
+        application_deadline: formattedDeadline,
         required_skills: [],
         description: `${newJob.role} position.`,
         responsibilities: "Responsible for engineering tasks.",
@@ -111,7 +113,7 @@ const Jobs = () => {
       });
       if (res.status === 201 || res.status === 200) {
         fetchData();
-        setNewJob({ companyId: '', role: '', package: '', working: 'Remote', schedule: 'Full-time' });
+        setNewJob({ companyId: '', role: '', package: '', working: 'Remote', schedule: 'Full-time', deadline: '' });
         setShowJobForm(false);
       }
     } catch (err) {
@@ -322,8 +324,18 @@ const Jobs = () => {
                   <option value="Shift hours">Shift hours</option>
                 </select>
               </div>
-              <div className="lg:col-span-2 flex justify-end">
-                <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white px-8 py-2 rounded-lg text-sm font-medium transition-colors h-[42px]">
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Application Deadline</label>
+                <input 
+                  type="date"
+                  required
+                  value={newJob.deadline}
+                  onChange={(e) => setNewJob({...newJob, deadline: e.target.value})}
+                  className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all bg-slate-50"
+                />
+              </div>
+              <div className="lg:col-span-6 flex justify-end mt-2">
+                <button type="submit" className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-8 py-2 rounded-lg text-sm font-medium transition-colors h-[42px] shadow-sm shadow-purple-500/10">
                   Save Job Posting
                 </button>
               </div>
