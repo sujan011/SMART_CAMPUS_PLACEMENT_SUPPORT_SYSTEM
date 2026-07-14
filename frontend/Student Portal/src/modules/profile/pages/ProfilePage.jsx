@@ -178,32 +178,54 @@ const ProfilePageContent = () => {
     };
 
     const handleSaveProjects = async () => {
-        setIsEditing(false);
         try {
             const currentProfile = await getProfile();
             const dbProjects = currentProfile.projects || [];
-            
-            const uiIds = projectsList.map(p => String(p.id));
-            const toDelete = dbProjects.filter(p => !uiIds.includes(String(p.id)));
-            await Promise.all(toDelete.map(p => api.deleteProject(p.id)));
 
-            await Promise.all(projectsList.map(project => {
-                const payload = {
-                    title: project.name,
-                    description: project.description,
-                    project_url: project.url,
-                    github_url: project.url
-                };
-                
-                if (String(project.id).startsWith('temp-') || isNaN(parseInt(project.id))) {
-                    return api.createProject(payload);
-                } else {
+            // Delete removed projects
+            const uiIds = projectsList
+                .filter(p => !String(p.id).startsWith("temp-"))
+                .map(p => Number(p.id));
+
+            const toDelete = dbProjects.filter(p => !uiIds.includes(p.id));
+
+            await Promise.all(
+                toDelete.map(p => api.deleteProject(p.id))
+            );
+
+            // Create / Update
+            await Promise.all(
+                projectsList.map(project => {
+                    const payload = {
+                        title: project.name,
+                        description: project.description,
+                        project_url: project.url,
+                        github_url: project.url,
+                    };
+
+                    if (String(project.id).startsWith("temp-")) {
+                        return api.createProject(payload);
+                    }
+
                     return api.updateProject(project.id, payload);
-                }
-            }));
-            
+                })
+            );
+
             const updatedProfile = await getProfile();
+
             setProfile(updatedProfile);
+
+            setProjectsList(
+                updatedProfile.projects.map(p => ({
+                    id: p.id,
+                    name: p.title,
+                    url: p.project_url || p.github_url || "",
+                    description: p.description || "",
+                }))
+            );
+
+            setIsEditing(false);
+
         } catch (e) {
             console.error("Failed to save projects", e);
         }
@@ -303,7 +325,14 @@ const ProfilePageContent = () => {
     };
 
     const addSkillRow = () => {
-        setSkillsList([...skillsList, { id: Date.now(), name: '', proficiency: 'Beginner' }]);
+        setSkillsList([
+            ...skillsList,
+            {
+                id: `temp-${Date.now()}`,
+                name: '',
+                proficiency: 'Beginner'
+            }
+        ]);
     };
     
     const removeSkillRow = (id) => {
@@ -320,7 +349,15 @@ const ProfilePageContent = () => {
     };
 
     const addProjectRow = () => {
-        setProjectsList([...projectsList, { id: Date.now(), name: '', url: '', description: '' }]);
+        setProjectsList([
+            ...projectsList,
+            {
+                id: `temp-${Date.now()}`,
+                name: '',
+                url: '',
+                description: ''
+            }
+        ]);
     };
     
     const removeProjectRow = (id) => {
@@ -351,7 +388,7 @@ const ProfilePageContent = () => {
     };
 
     const addCertificationRow = () => {
-        setCertificationsList([...certificationsList, { id: Date.now(), name: '', no: '', validity: '' }]);
+        setCertificationsList([...certificationsList, { id: `temp-${Date.now()}`, name: '', no: '', validity: '' }]);
     };
     
     const removeCertificationRow = (id) => {
