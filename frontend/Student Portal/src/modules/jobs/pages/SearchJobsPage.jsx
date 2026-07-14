@@ -6,6 +6,7 @@ export const SearchJobsPage = () => {
     const [jobs, setJobs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         api.getJobs()
@@ -27,12 +28,28 @@ export const SearchJobsPage = () => {
         <div className="p-4 sm:p-6 max-w-3xl mx-auto min-h-screen">
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">Search Jobs</h1>
-                <p className="text-gray-500">Find and apply to the latest opportunities.</p>
+                <p className="text-gray-500 mb-4">
+                    Find and apply to the latest opportunities.
+                </p>
+
+                <input
+                    type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search by job title, company or location..."
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
             </div>
 
             {/* Job Listings List */}
             <div className="space-y-4">
-                {jobs.map(job => (
+                {jobs
+                    .filter(job =>
+                        job.title?.toLowerCase().includes(search.toLowerCase()) ||
+                        job.company_name?.toLowerCase().includes(search.toLowerCase()) ||
+                        job.location?.toLowerCase().includes(search.toLowerCase())
+                    )
+                .map(job => (
                     <JobCard key={job.id} job={job} />
                 ))}
             </div>
