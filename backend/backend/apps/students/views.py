@@ -130,3 +130,46 @@ class VerifyStudentView(APIView):
         profile.is_verified = True
         profile.save()
         return Response({"detail": "Student verified successfully."})
+
+
+class UpdateStudentStatusView(APIView):
+    """PATCH /api/students/<id>/status/  body: {"is_active": true|false}
+    Admin-only: activates/deactivates the student's underlying user account
+    (a deactivated account can no longer log in)."""
+    permission_classes = [IsOfficerOrAdmin]
+
+    def patch(self, request, pk):
+        try:
+            profile = StudentProfile.objects.select_related("user").get(pk=pk)
+        except StudentProfile.DoesNotExist:
+            return Response({"detail": "Student not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        is_active = request.data.get("is_active")
+        if is_active is None:
+            return Response({"is_active": "This field is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        profile.user.is_active = bool(is_active)
+        profile.user.save(update_fields=["is_active"])
+        return Response(
+            {
+                "detail": "Student status updated successfully.",
+                "id": profile.id,
+                "is_active": profile.user.is_active,
+            }
+        )
+
+
+class DeleteStudentView(APIView):
+    """DELETE /api/students/<id>/delete/
+    Admin-only: permanently deletes the student's user account
+    (cascades to the StudentProfile and all related records)."""
+    permission_classes = [IsOfficerOrAdmin]
+
+    def delete(self, request, pk):
+        try:
+            profile = StudentProfile.objects.select_related("user").get(pk=pk)
+        except StudentProfile.DoesNotExist:
+            return Response({"detail": "Student not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        profile.user.delete()  # cascades to StudentProfile via OneToOneField
+        return Response(status=status.HTTP_204_NO_CONTENT)

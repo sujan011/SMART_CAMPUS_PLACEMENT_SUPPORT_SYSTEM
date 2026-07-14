@@ -14,4 +14,6 @@ urlpatterns = [
     path("profile/completion/", views.ProfileCompletionView.as_view(), name="profile-completion"),
     path("", views.StudentListView.as_view(), name="student-list"),
     path("<int:pk>/verify/", views.VerifyStudentView.as_view(), name="verify-student"),
+    path("<int:pk>/status/", views.UpdateStudentStatusView.as_view(), name="update-student-status"),
+    path("<int:pk>/delete/", views.DeleteStudentView.as_view(), name="delete-student"),
 ] + router.urls

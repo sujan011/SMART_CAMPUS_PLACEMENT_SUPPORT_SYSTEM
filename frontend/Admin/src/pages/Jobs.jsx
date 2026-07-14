@@ -14,30 +14,59 @@ import { api } from "../services/api";
 
 export default function Jobs() {
   const [jobs, setJobs] = useState([]);
+  const [companies, setCompanies] = useState([]); // for the company dropdown in the form
+  const [isSaving, setIsSaving] = useState(false);
+  const [formError, setFormError] = useState("");
 
   const fetchJobs = () => {
-    api.getJobs()
+    return api.getJobs()
       .then(res => {
         const list = res.data.results || res.data;
         const mapped = list.map(j => ({
           id: j.id,
-          studentName: j.company_name || "Company Drive",
+          // Real backend fields (used by the Add/Edit form -> sent back to Django)
+          // Note: the jobs list endpoint returns company_name, not the raw company id,
+          // so the id is resolved by matching company_name against the companies list
+          // when the Edit form is opened (see handleEdit below).
           title: j.title,
+          job_type: j.job_type || "full_time",
+          location: j.location || "",
+          salary_min: j.salary_min ?? "",
+          salary_max: j.salary_max ?? "",
+          application_deadline: j.application_deadline
+            ? j.application_deadline.slice(0, 10)
+            : "",
+          is_active: j.is_active !== undefined ? j.is_active : true,
+          description: j.description || "",
+          // Cosmetic/display-only fields for the existing table/stats UI
+          studentName: j.company_name || "Company Drive",
           company: j.company_name || "N/A",
-          location: j.location || "N/A",
-          package: j.salary_max ? `${j.salary_min / 100000} - ${j.salary_max / 100000} LPA` : "Not Disclosed",
-          status: "Approved",
-          statusColor: "text-green-700 bg-green-100",
+          package: j.salary_max
+            ? `${j.salary_min / 100000} - ${j.salary_max / 100000} LPA`
+            : "Not Disclosed",
+          status: j.is_active ? "Approved" : "Rejected",
+          statusColor: j.is_active
+            ? "text-green-700 bg-green-100"
+            : "text-red-700 bg-red-100",
           date: new Date(j.created_at).toLocaleDateString(),
-          description: j.description || ""
         }));
         setJobs(mapped);
       })
       .catch(err => console.error("Failed to fetch jobs list", err));
   };
 
+  const fetchCompanies = () => {
+    api.getCompanies()
+      .then(res => {
+        const list = res.data.results || res.data;
+        setCompanies(list.map(c => ({ id: c.id, name: c.name })));
+      })
+      .catch(err => console.error("Failed to fetch companies for job form", err));
+  };
+
   useEffect(() => {
     fetchJobs();
+    fetchCompanies();
   }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,17 +81,26 @@ export default function Jobs() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [editingJob, setEditingJob] = useState(null);
 
-  // Status Handlers
-  const handleApprove = (id) => {
-    setJobs(jobs.map(job => 
-      job.id === id ? { ...job, status: "Approved", statusColor: "text-green-700 bg-green-100" } : job
-    ));
+  // Status Handlers -- Job model only has a boolean `is_active`, so
+  // Approve -> is_active: true, Reject -> is_active: false
+  const handleApprove = async (id) => {
+    try {
+      await api.updateJob(id, { is_active: true });
+      await fetchJobs();
+    } catch (err) {
+      console.error("Failed to approve job", err.response?.data || err);
+      alert("Failed to approve job.");
+    }
   };
 
-  const handleReject = (id) => {
-    setJobs(jobs.map(job => 
-      job.id === id ? { ...job, status: "Rejected", statusColor: "text-red-700 bg-red-100" } : job
-    ));
+  const handleReject = async (id) => {
+    try {
+      await api.updateJob(id, { is_active: false });
+      await fetchJobs();
+    } catch (err) {
+      console.error("Failed to reject job", err.response?.data || err);
+      alert("Failed to reject job.");
+    }
   };
 
   // Modal Handlers
@@ -71,9 +109,15 @@ export default function Jobs() {
     setIsViewOpen(true); 
   };
   
-  const handleEdit = (job) => { 
-    setEditingJob(job); 
-    setIsFormOpen(true); 
+  const handleEdit = (job) => {
+    // Resolve the company id by matching the display name, since the jobs
+    // list endpoint only returns company_name, not the raw id.
+    const matchedCompany = companies.find((c) => c.name === job.company);
+    setEditingJob({
+      ...job,
+      companyId: matchedCompany ? matchedCompany.id : "",
+    });
+    setIsFormOpen(true);
   };
   
   const handleDeleteClick = (job) => { 
@@ -87,29 +131,55 @@ export default function Jobs() {
   };
   
   // Save/Delete Handlers
-  const handleSaveJob = (jobData) => {
-    const colorMap = {
-      "Pending": "text-yellow-700 bg-yellow-100",
-      "Approved": "text-green-700 bg-green-100",
-      "Rejected": "text-red-700 bg-red-100"
+  const handleSaveJob = async (jobData) => {
+    setFormError("");
+
+    const payload = {
+      title: jobData.title,
+      company: jobData.companyId,
+      job_type: jobData.job_type,
+      location: jobData.location,
+      salary_min: jobData.salary_min || null,
+      salary_max: jobData.salary_max || null,
+      application_deadline: jobData.application_deadline
+        ? `${jobData.application_deadline}T23:59:00Z`
+        : null,
+      description: jobData.description,
+      is_active: jobData.is_active,
     };
-    
-    if (editingJob) {
-      setJobs(jobs.map(job => 
-        job.id === editingJob.id ? { ...jobData, id: editingJob.id, statusColor: colorMap[jobData.status] } : job
-      ));
-    } else {
-      setJobs([
-        { ...jobData, id: Date.now(), date: new Date().toLocaleDateString(), statusColor: colorMap[jobData.status] }, 
-        ...jobs
-      ]);
+
+    setIsSaving(true);
+    try {
+      if (editingJob) {
+        await api.updateJob(editingJob.id, payload);
+      } else {
+        await api.createJob(payload);
+      }
+      await fetchJobs();
+      setIsFormOpen(false);
+      setEditingJob(null);
+    } catch (err) {
+      console.error("Failed to save job", err.response?.data || err);
+      setFormError(
+        err.response?.data
+          ? JSON.stringify(err.response.data)
+          : "Failed to save job. Please try again."
+      );
+    } finally {
+      setIsSaving(false);
     }
-    setIsFormOpen(false);
   };
 
-  const handleConfirmDelete = (id) => {
-    setJobs(jobs.filter(job => job.id !== id));
-    setIsDeleteOpen(false);
+  const handleConfirmDelete = async (id) => {
+    try {
+      await api.deleteJob(id);
+      await fetchJobs();
+    } catch (err) {
+      console.error("Failed to delete job", err.response?.data || err);
+      alert("Failed to delete job.");
+    } finally {
+      setIsDeleteOpen(false);
+    }
   };
 
   // Filter Logic
@@ -156,9 +226,15 @@ export default function Jobs() {
       {/* Render Modals */}
       <JobFormModal 
         isOpen={isFormOpen} 
-        onClose={() => setIsFormOpen(false)} 
+        onClose={() => {
+          setIsFormOpen(false);
+          setFormError("");
+        }}
         onSave={handleSaveJob} 
-        editingJob={editingJob} 
+        editingJob={editingJob}
+        companies={companies}
+        isSaving={isSaving}
+        formError={formError}
       />
       <ViewJobModal 
         isOpen={isViewOpen} 

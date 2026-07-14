@@ -5,29 +5,36 @@ export default function CompanyFormModal({
   onClose,
   onSave,
   editingCompany,
+  isSaving,
+  formError,
 }) {
   const initialState = {
-    companyName: "",
-    hrName: "",
-    email: "",
-    phone: "",
+    name: "",
     website: "",
     industry: "IT",
-    address: "",
+    headquarters: "",
+    company_size: "",
     description: "",
-    totalJobs: "",
-    status: "Pending",
   };
 
   const [formData, setFormData] = useState(initialState);
+  const [localError, setLocalError] = useState("");
 
   useEffect(() => {
     if (editingCompany) {
-      setFormData(editingCompany);
+      setFormData({
+        name: editingCompany.name || "",
+        website: editingCompany.website || "",
+        industry: editingCompany.industry || "IT",
+        headquarters: editingCompany.headquarters || "",
+        company_size: editingCompany.company_size || "",
+        description: editingCompany.description || "",
+      });
     } else {
       setFormData(initialState);
     }
-  }, [editingCompany]);
+    setLocalError("");
+  }, [editingCompany, isOpen]);
 
   if (!isOpen) return null;
 
@@ -41,16 +48,12 @@ export default function CompanyFormModal({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      !formData.companyName ||
-      !formData.hrName ||
-      !formData.email ||
-      !formData.phone
-    ) {
-      alert("Please fill all required fields.");
+    if (!formData.name.trim()) {
+      setLocalError("Company name is required.");
       return;
     }
 
+    setLocalError("");
     onSave(formData);
   };
 
@@ -77,41 +80,8 @@ export default function CompanyFormModal({
                 <label className="font-normal text-gray-700">Company Name *</label>
                 <input
                   type="text"
-                  name="companyName"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                  className="w-full mt-2 border rounded-lg p-3 font-normal outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="font-normal text-gray-700">HR Name *</label>
-                <input
-                  type="text"
-                  name="hrName"
-                  value={formData.hrName}
-                  onChange={handleChange}
-                  className="w-full mt-2 border rounded-lg p-3 font-normal outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="font-normal text-gray-700">Email *</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full mt-2 border rounded-lg p-3 font-normal outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="font-normal text-gray-700">Phone *</label>
-                <input
-                  type="text"
-                  name="phone"
-                  value={formData.phone}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
                   className="w-full mt-2 border rounded-lg p-3 font-normal outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
@@ -124,6 +94,7 @@ export default function CompanyFormModal({
                   name="website"
                   value={formData.website}
                   onChange={handleChange}
+                  placeholder="https://example.com"
                   className="w-full mt-2 border rounded-lg p-3 font-normal outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
@@ -147,41 +118,34 @@ export default function CompanyFormModal({
               </div>
 
               <div>
-                <label className="font-normal text-gray-700">Total Jobs</label>
+                <label className="font-normal text-gray-700">Company Size</label>
                 <input
-                  type="number"
-                  name="totalJobs"
-                  value={formData.totalJobs}
+                  type="text"
+                  name="company_size"
+                  value={formData.company_size}
                   onChange={handleChange}
+                  placeholder="e.g. 51-200 employees"
                   className="w-full mt-2 border rounded-lg p-3 font-normal outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
-              </div>
-
-              <div>
-                <label className="font-normal text-gray-700">Status</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  className="w-full mt-2 border rounded-lg p-3 font-normal outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                >
-                  <option>Approved</option>
-                  <option>Pending</option>
-                  <option>Rejected</option>
-                </select>
               </div>
             </div>
 
             <div className="mt-5">
-              <label className="font-normal text-gray-700">Address</label>
+              <label className="font-normal text-gray-700">Headquarters</label>
               <input
                 type="text"
-                name="address"
-                value={formData.address}
+                name="headquarters"
+                value={formData.headquarters}
                 onChange={handleChange}
                 className="w-full mt-2 border rounded-lg p-3 font-normal outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
+
+            {(formError || localError) && (
+              <div className="mt-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">
+                {localError || formError}
+              </div>
+            )}
 
             <div className="mt-5">
               <label className="font-normal text-gray-700">Company Description</label>
@@ -206,9 +170,14 @@ export default function CompanyFormModal({
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-blue-600 text-white font-normal rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+              disabled={isSaving}
+              className="px-6 py-2.5 bg-blue-600 text-white font-normal rounded-lg hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {editingCompany ? "Update Company" : "Add Company"}
+              {isSaving
+                ? "Saving..."
+                : editingCompany
+                ? "Update Company"
+                : "Add Company"}
             </button>
           </div>
 

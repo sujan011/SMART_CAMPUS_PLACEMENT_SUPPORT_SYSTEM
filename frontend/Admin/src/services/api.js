@@ -32,11 +32,35 @@ export const api = {
     getStudents: () =>
         API.get("/students/"),
 
+    updateStudentStatus: (id, isActive) =>
+        API.patch(`/students/${id}/status/`, { is_active: isActive }),
+
+    deleteStudent: (id) =>
+        API.delete(`/students/${id}/delete/`),
+
     getCompanies: () =>
         API.get("/companies/"),
 
+    createCompany: (data) =>
+        API.post("/companies/", data),
+
+    updateCompany: (id, data) =>
+        API.patch(`/companies/${id}/`, data),
+
+    deleteCompany: (id) =>
+        API.delete(`/companies/${id}/`),
+
     getJobs: () =>
         API.get("/jobs/"),
+
+    createJob: (data) =>
+        API.post("/jobs/", data),
+
+    updateJob: (id, data) =>
+        API.patch(`/jobs/${id}/`, data),
+
+    deleteJob: (id) =>
+        API.delete(`/jobs/${id}/`),
 
     getNotifications: () =>
         API.get("/notifications/"),

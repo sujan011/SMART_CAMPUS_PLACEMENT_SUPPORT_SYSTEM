@@ -29,14 +29,16 @@ export default function Users() {
     .then(([studentsRes, companiesRes]) => {
       const studentList = (studentsRes.data.results || studentsRes.data).map(s => ({
         id: s.id,
+        _type: "student",
         name: s.full_name || "New Student",
         email: s.email,
         role: "Student",
-        status: s.is_verified ? "Active" : "Inactive"
+        status: s.is_active ? "Active" : "Inactive"
       }));
 
       const companyList = (companiesRes.data.results || companiesRes.data).map(c => ({
         id: c.id,
+        _type: "company",
         name: c.name,
         email: c.website || "No Email",
         role: "Company",
@@ -76,30 +78,51 @@ export default function Users() {
     setIsDeleteOpen(true);
   };
 
-  const handleSaveUser = (userData) => {
-    const emailExists = users.some(
-      (u) => u.email === userData.email && u.id !== editingUser?.id
-    );
+  const [isSaving, setIsSaving] = useState(false);
+  const [formError, setFormError] = useState("");
 
-    if (emailExists) {
-      alert("Email already exists");
-      return;
+  const handleSaveUser = async (userData) => {
+    if (!editingUser) return; // "Add User" has no backend support -- see UserFormModal
+
+    setFormError("");
+    setIsSaving(true);
+    try {
+      if (editingUser._type === "student") {
+        await api.updateStudentStatus(editingUser.id, userData.status === "Active");
+      } else if (editingUser._type === "company") {
+        await api.updateCompany(editingUser.id, { name: userData.name, website: userData.email });
+      }
+      await fetchUsers();
+      setEditingUser(null);
+      setIsFormOpen(false);
+    } catch (err) {
+      console.error("Failed to save user", err.response?.data || err);
+      setFormError(
+        err.response?.data
+          ? JSON.stringify(err.response.data)
+          : "Failed to save. Please try again."
+      );
+    } finally {
+      setIsSaving(false);
     }
-
-    if (editingUser) {
-      setUsers(users.map((u) => (u.id === editingUser.id ? { ...userData, id: editingUser.id } : u)));
-    } else {
-      setUsers([...users, { ...userData, id: Date.now() }]);
-    }
-
-    setEditingUser(null);
-    setIsFormOpen(false);
   };
 
-  const handleDeleteUser = (id) => {
-    setUsers(users.filter((u) => u.id !== id));
-    setSelectedUser(null);
-    setIsDeleteOpen(false);
+  const handleDeleteUser = async (id) => {
+    if (!selectedUser) return;
+    try {
+      if (selectedUser._type === "student") {
+        await api.deleteStudent(id);
+      } else if (selectedUser._type === "company") {
+        await api.deleteCompany(id);
+      }
+      await fetchUsers();
+    } catch (err) {
+      console.error("Failed to delete user", err.response?.data || err);
+      alert("Failed to delete. Please try again.");
+    } finally {
+      setSelectedUser(null);
+      setIsDeleteOpen(false);
+    }
   };
 
   const filteredUsers = users.filter((u) => {
@@ -168,9 +191,12 @@ export default function Users() {
             onClose={() => {
               setIsFormOpen(false);
               setEditingUser(null);
+              setFormError("");
             }}
             onSave={handleSaveUser}
             editingUser={editingUser}
+            isSaving={isSaving}
+            formError={formError}
           />
 
           <ViewUserModal

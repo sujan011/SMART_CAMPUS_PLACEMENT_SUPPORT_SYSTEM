@@ -21,14 +21,20 @@ export default function Companies() {
         const list = res.data.results || res.data;
         const mapped = list.map(c => ({
           id: c.id,
+          // Real backend fields (used by the Add/Edit form -> sent back to Django)
+          name: c.name,
+          website: c.website || "",
+          industry: c.industry || "IT",
+          headquarters: c.headquarters || "",
+          company_size: c.company_size || "",
+          description: c.description || "",
+          // Cosmetic/display-only fields (backend has no matching columns for these,
+          // so they are derived for the table/stats UI and are not persisted)
           companyName: c.name,
           hrName: "Verified HR",
           email: c.website || "No Website",
           phone: c.company_size ? `${c.company_size} Employees` : "N/A",
-          website: c.website || "#",
-          industry: c.industry || "IT",
           address: c.headquarters || "N/A",
-          description: c.description || "",
           totalJobs: c.open_jobs_count || 0,
           status: "Approved",
           registeredDate: new Date(c.created_at).toLocaleDateString()
@@ -52,6 +58,8 @@ export default function Companies() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [formError, setFormError] = useState("");
 
   const filteredCompanies = companies.filter((company) => {
     const matchSearch =
@@ -88,32 +96,51 @@ export default function Companies() {
     setIsDeleteOpen(true);
   };
 
-  const handleSaveCompany = (companyData) => {
-    if (editingCompany) {
-      setCompanies(
-        companies.map((company) =>
-          company.id === editingCompany.id
-            ? { ...companyData, id: editingCompany.id }
-            : company
-        )
+  const handleSaveCompany = async (companyData) => {
+    setFormError("");
+
+    // Map the form's fields to exactly what the Django Company model accepts.
+    const payload = {
+      name: companyData.name,
+      website: companyData.website,
+      industry: companyData.industry,
+      headquarters: companyData.headquarters,
+      company_size: companyData.company_size,
+      description: companyData.description,
+    };
+
+    setIsSaving(true);
+    try {
+      if (editingCompany) {
+        await api.updateCompany(editingCompany.id, payload);
+      } else {
+        await api.createCompany(payload);
+      }
+      await fetchCompanies(); // refresh from backend so the table shows saved data
+      setIsFormOpen(false);
+      setEditingCompany(null);
+    } catch (err) {
+      console.error("Failed to save company", err.response?.data || err);
+      setFormError(
+        err.response?.data
+          ? JSON.stringify(err.response.data)
+          : "Failed to save company. Please try again."
       );
-    } else {
-      setCompanies([
-        ...companies,
-        {
-          ...companyData,
-          id: Date.now(),
-          registeredDate: new Date().toLocaleDateString(),
-        },
-      ]);
+    } finally {
+      setIsSaving(false);
     }
-    setIsFormOpen(false);
-    setEditingCompany(null);
   };
 
-  const handleDeleteCompany = (id) => {
-    setCompanies(companies.filter((company) => company.id !== id));
-    setIsDeleteOpen(false);
+  const handleDeleteCompany = async (id) => {
+    try {
+      await api.deleteCompany(id);
+      await fetchCompanies(); // refresh from backend
+    } catch (err) {
+      console.error("Failed to delete company", err.response?.data || err);
+      alert("Failed to delete company. It may still be referenced by active jobs.");
+    } finally {
+      setIsDeleteOpen(false);
+    }
   };
 
   return (
@@ -169,9 +196,14 @@ export default function Companies() {
       {/* Modals remain completely unchanged */}
       <CompanyFormModal
         isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
+        onClose={() => {
+          setIsFormOpen(false);
+          setFormError("");
+        }}
         onSave={handleSaveCompany}
         editingCompany={editingCompany}
+        isSaving={isSaving}
+        formError={formError}
       />
 
       <ViewCompanyModal
