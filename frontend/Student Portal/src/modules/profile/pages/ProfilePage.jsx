@@ -244,8 +244,8 @@ const ProfilePageContent = () => {
             await Promise.all(certificationsList.map(cert => {
                 const payload = {
                     title: cert.name,
-                    issuer: cert.no || 'Unknown',
-                    credential_url: cert.no ? 'http://example.com' : ''
+                    issuer: cert.no,
+                    credential_url: cert.url || "",
                 };
                 
                 if (String(cert.id).startsWith('temp-') || isNaN(parseInt(cert.id))) {
@@ -500,12 +500,15 @@ const ProfilePageContent = () => {
 
                     // Map certifications list
                     if (profileData.certifications && profileData.certifications.length > 0) {
-                        setCertificationsList(profileData.certifications.map(c => ({
-                            id: c.id,
-                            name: c.title,
-                            no: c.credential_url ? 'Credential Link' : 'N/A',
-                            validity: c.issue_date || 'N/A'
-                        })));
+                        setCertificationsList(
+                            profileData.certifications.map(c => ({
+                                id: c.id,
+                                name: c.title,
+                                no: c.issuer || "",
+                                url: c.credential_url || "",
+                                validity: c.issue_date || "",
+                            }))
+                        );
                     } else {
                         setCertificationsList([]);
                     }
@@ -880,10 +883,10 @@ const ProfilePageContent = () => {
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">Certification No</label>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">Issuer</label>
                                                         <input 
                                                             type="text" 
-                                                            placeholder="e.g. AWS-123456"
+                                                            placeholder="e.g. Coursera, Udemy, AWS"
                                                             className={`w-full p-2.5 border rounded-lg text-sm transition-colors ${isEditing ? 'border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none' : 'border-gray-200 bg-transparent text-gray-800 cursor-not-allowed'}`}
                                                             disabled={!isEditing}
                                                             value={cert.no}
@@ -891,14 +894,23 @@ const ProfilePageContent = () => {
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">Validity Time</label>
-                                                        <input 
-                                                            type="text" 
-                                                            placeholder="e.g. 2023 - 2026"
-                                                            className={`w-full p-2.5 border rounded-lg text-sm transition-colors ${isEditing ? 'border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none' : 'border-gray-200 bg-transparent text-gray-800 cursor-not-allowed'}`}
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                                            Credential URL
+                                                        </label>
+
+                                                        <input
+                                                            type="url"
+                                                            placeholder="https://..."
+                                                            className={`w-full p-2.5 border rounded-lg text-sm transition-colors ${
+                                                                isEditing
+                                                                    ? "border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                                                    : "border-gray-200 bg-transparent text-gray-800 cursor-not-allowed"
+                                                            }`}
                                                             disabled={!isEditing}
-                                                            value={cert.validity}
-                                                            onChange={(e) => handleCertificationChange(cert.id, 'validity', e.target.value)}
+                                                            value={cert.url || ""}
+                                                            onChange={(e) =>
+                                                                handleCertificationChange(cert.id, "url", e.target.value)
+                                                            }
                                                         />
                                                     </div>
                                                 </div>

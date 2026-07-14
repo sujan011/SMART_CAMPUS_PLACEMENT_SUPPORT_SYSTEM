@@ -179,7 +179,13 @@ export const ATSViewPage = () => {
         if (passedResumeData) {
             calculateFromResumeData(passedResumeData);
         } else {
-            setAts(data.atsScore);
+            setAts(data?.atsScore || {
+                overall: 0,
+                content: 0,
+                format: 0,
+                keywords: 0,
+                structure: 0,
+            });
             setAnalysis(data.atsAnalysis);
             setMatched(data.matchedKeywords);
             setMissing(data.missingKeywords);

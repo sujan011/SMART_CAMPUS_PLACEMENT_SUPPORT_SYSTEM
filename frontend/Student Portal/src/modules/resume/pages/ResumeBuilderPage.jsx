@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../../core/services/api';
+import generatePDF, { usePDF } from "react-to-pdf";
 
 const THEMES = ['#2563eb', '#16a34a', '#0f766e', '#be123c', '#334155', '#ea580c'];
 
@@ -68,7 +69,7 @@ export const ResumeBuilderPage = () => {
     const [selectedTemplate, setSelectedTemplate] = useState('template1');
     const [activeSection, setActiveSection] = useState('personal');
     const [themeColor, setThemeColor] = useState(THEMES[0]);
-
+    
     const [resumeData, setResumeData] = useState({
         personal: { 
             name: 'Dani Villanueva', 
@@ -91,7 +92,10 @@ export const ResumeBuilderPage = () => {
         rewards: 'The Best Employee of the Year\nOct 2019 | Liceria & Co.\n\nThe Best Employee of the Year\nMay 2017 | Liceria & Co.',
         projects: 'E-Commerce Platform (Jan 2024)\n- Full stack MERN application with Stripe integration.\n\nTask Manager (Nov 2023)\n- React application with drag and drop features.'
     });
-
+    const { toPDF, targetRef } = usePDF({
+        filename: `${resumeData.personal.name || "Resume"}.pdf`,
+    });
+    
     useEffect(() => {
         const fetchStudentProfile = async () => {
             try {
@@ -136,6 +140,14 @@ export const ResumeBuilderPage = () => {
         fetchStudentProfile();
     }, []);
 
+    useEffect(() => {
+        const schema = TEMPLATE_SCHEMAS[selectedTemplate];
+
+        if (!schema.includes(activeSection)) {
+            setActiveSection(schema[0]);
+        }
+    }, [selectedTemplate, activeSection]);   
+
     const handlePersonalChange = (field, value) => setResumeData(prev => ({ ...prev, personal: { ...prev.personal, [field]: value } }));
     const handleBasicChange = (field, value) => setResumeData(prev => ({ ...prev, [field]: value }));
 
@@ -167,9 +179,9 @@ export const ResumeBuilderPage = () => {
     const renderFormSection = () => {
         const activeSchema = TEMPLATE_SCHEMAS[selectedTemplate];
         
-        if (!activeSchema.includes(activeSection) && activeSection !== 'personal') {
-            setActiveSection(activeSchema[0]);
-        }
+        // if (!activeSchema.includes(activeSection) && activeSection !== 'personal') {
+        //     setActiveSection(activeSchema[0]);
+        // }
 
         return (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col h-[calc(100vh-220px)] min-h-[600px]">
@@ -247,7 +259,9 @@ export const ResumeBuilderPage = () => {
         const pd = resumeData.personal;
 
         return (
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-y-auto h-[calc(100vh-220px)] min-h-[600px] w-full custom-scrollbar">
+            
+            <div ref={targetRef}
+                className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-y-auto w-full ">
                 <div className="origin-top aspect-[1/1.414] w-full min-h-[1056px] relative text-sm bg-white overflow-hidden">
                     
                     {selectedTemplate === 'template1' && (
@@ -579,6 +593,29 @@ export const ResumeBuilderPage = () => {
         );
     };
 
+    const downloadPDF = async () => {
+        const element = resumeRef.current;
+        if (!element) return;
+
+        // const canvas = await html2canvas(element, {
+        //     scale: 2,
+        //     useCORS: true,
+        //     backgroundColor: "#ffffff"
+        // });
+
+        const imgData = canvas.toDataURL("image/png");
+
+        // const pdf = new jsPDF("p", "mm", "a4");
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight =
+            (canvas.height * pdfWidth) / canvas.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+        pdf.save(`${resumeData.personal.name || "Resume"}.pdf`);
+    };    
+
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
             <div className="max-w-[1600px] mx-auto">
@@ -588,7 +625,10 @@ export const ResumeBuilderPage = () => {
                         <button onClick={() => navigate('/ats', { state: { resumeData } })} className="px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium shadow-sm flex items-center gap-2">
                             <i className="fa-solid fa-magnifying-glass-chart"></i> ATS Check
                         </button>
-                        <button className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium shadow-sm flex items-center gap-2">
+                        <button
+                            onClick={() => toPDF()}
+                            className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                        >
                             <i className="fa-solid fa-download"></i> Download PDF
                         </button>
                     </div>
@@ -601,7 +641,7 @@ export const ResumeBuilderPage = () => {
                         {renderFormSection()}
                     </div>
 
-                    <div className="hidden xl:block xl:col-span-8 h-full">
+                    <div className="block xl:col-span-8 h-full">
                         {renderPreviewSection()}
                     </div>
                 </div>
