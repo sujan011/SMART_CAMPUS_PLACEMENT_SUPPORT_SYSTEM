@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useApp } from '../../../core/context/AppContext';
 import { api } from '../../../core/services/api';
+import { ProfileProjectProvider } from "./ProfileProjectContext";
 
 const ProfileContext = createContext();
 
@@ -95,8 +96,9 @@ export const ProfileProvider = ({ children }) => {
             setSocialLinks({
                 gmail: p.email || "",
                 github: p.github_url || "",
+                discord: "",
+                x: p.portfolio_url || "",
                 linkedin: p.linkedin_url || "",
-                portfolio: p.portfolio_url || "",
             });
 
         } catch (err) {
@@ -160,20 +162,33 @@ export const ProfileProvider = ({ children }) => {
     };
 
     const updateAcademicSummary = async (updates) => {
-        setAcademicSummary(prev => ({ ...prev, ...updates }));
+
+        setAcademicSummary(prev => ({
+            ...prev,
+            ...updates,
+        }));
+
         try {
+
             await api.updateProfile({
+
                 college: updates.college,
                 branch: updates.branch,
                 enrollment_no: updates.enrollmentNo,
-                cgpa: updates.cgpa ? parseFloat(updates.cgpa.split('/')[0]) : null,
-                passing_year: updates.passingYear ? parseInt(updates.passingYear) : null,
+                cgpa: updates.cgpa || null,
+                passing_year: updates.passingYear || null,
                 current_year: updates.currentYear,
+
             });
+
             fetchProfile();
-        } catch (e) {
-            console.error("Failed to update academic summary", e);
+
+        } catch (err) {
+
+            console.error(err);
+
         }
+
     };
 
     const updateSocialLinks = async (updates) => {
@@ -201,7 +216,9 @@ export const ProfileProvider = ({ children }) => {
 
     return (
         <ProfileContext.Provider value={value}>
-            {children}
+            <ProfileProjectProvider>
+                {children}
+            </ProfileProjectProvider>
         </ProfileContext.Provider>
     );
 };
