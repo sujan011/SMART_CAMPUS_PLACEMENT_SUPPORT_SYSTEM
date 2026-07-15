@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     # third-party
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "django_filters",
 
@@ -171,6 +172,20 @@ FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:5173")
 # ---------------------------------------------------------------------
 # Email Configuration
 # ---------------------------------------------------------------------
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "noreply@smartcampus.edu"
+# When EMAIL_HOST is set in .env, Django uses SMTP; otherwise falls back
+# to the console backend so dev workflows don't need a mail server.
+_EMAIL_HOST = config("EMAIL_HOST", default="")
+
+if _EMAIL_HOST:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = _EMAIL_HOST
+    EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+    EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+    EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+    EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+else:
+    # Development fallback — emails are printed to the terminal
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@smartcampus.edu")
 

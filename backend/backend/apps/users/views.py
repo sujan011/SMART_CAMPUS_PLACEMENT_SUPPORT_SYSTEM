@@ -1,11 +1,13 @@
 from django.contrib.auth import update_session_auth_hash
+from django.utils import timezone
+
 # pyrefly: ignore [missing-import]
 from rest_framework import status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User
+from .models import User, EmailVerificationToken, PasswordResetToken
 from .serializers import (
     RegisterSerializer,
     LoginSerializer,
@@ -13,6 +15,11 @@ from .serializers import (
     ChangePasswordSerializer,
     ForgotPasswordSerializer,
     ResetPasswordSerializer,
+)
+from .utils import (
+    send_verification_email,
+    generate_password_reset_token,
+    send_reset_email,
 )
 
 
@@ -27,7 +34,7 @@ class RegisterView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        from apps.users.utils import send_verification_email
+        # Send verification link to the user's email
         send_verification_email(user)
 
         refresh = RefreshToken.for_user(user)
@@ -109,15 +116,14 @@ class ForgotPasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data["email"]
 
-        from apps.users.utils import generate_password_reset_token, send_reset_email
         try:
             user = User.objects.get(email=email)
             token_obj = generate_password_reset_token(user)
             send_reset_email(user, token_obj.token)
         except User.DoesNotExist:
-            pass
+            pass  # Do not reveal whether the email is registered
 
-        # Always return 200 regardless of whether email exists, to avoid user enumeration
+        # Always return 200 to avoid user enumeration
         return Response({"detail": "If that email exists, a reset link has been sent."})
 
 
@@ -129,8 +135,6 @@ class ResetPasswordView(APIView):
         serializer = ResetPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        from django.utils import timezone
-        from .models import PasswordResetToken
         token_str = serializer.validated_data["token"]
         new_password = serializer.validated_data["new_password"]
 
@@ -138,7 +142,7 @@ class ResetPasswordView(APIView):
             reset_token = PasswordResetToken.objects.get(
                 token=token_str,
                 is_used=False,
-                expires_at__gt=timezone.now()
+                expires_at__gt=timezone.now(),
             )
             user = reset_token.user
             user.set_password(new_password)
@@ -148,7 +152,10 @@ class ResetPasswordView(APIView):
             reset_token.save()
             return Response({"detail": "Password has been reset successfully."})
         except PasswordResetToken.DoesNotExist:
-            return Response({"detail": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Invalid or expired token."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class VerifyEmailView(APIView):
@@ -156,14 +163,11 @@ class VerifyEmailView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, token):
-        from django.utils import timezone
-        from .models import EmailVerificationToken
-
         try:
             verify_token = EmailVerificationToken.objects.get(
                 token=token,
                 is_used=False,
-                expires_at__gt=timezone.now()
+                expires_at__gt=timezone.now(),
             )
             user = verify_token.user
             user.is_email_verified = True
@@ -173,4 +177,26 @@ class VerifyEmailView(APIView):
             verify_token.save()
             return Response({"detail": "Email verified successfully."})
         except EmailVerificationToken.DoesNotExist:
-            return Response({"detail": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Invalid or expired token."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
+class ResendVerificationView(APIView):
+    """
+    POST /api/auth/resend-verification/
+    Allows an authenticated (but unverified) user to request a new
+    verification email, e.g. if the original one expired or was lost.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        if user.is_email_verified:
+            return Response(
+                {"detail": "Your email is already verified."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        send_verification_email(user)
+        return Response({"detail": "Verification email resent. Please check your inbox."})
